@@ -1,3 +1,5 @@
 settings.cfg
 *.pyc
 *.json
+all_tags*
+*.log

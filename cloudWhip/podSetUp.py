@@ -2,14 +2,13 @@ __author__ = 'shekar_n_h'
 
 import getTags
 import os
-
+import logging
 
 class PodSetUp(object):
     def __init__(self, ec2Connection):
         self.conn = ec2Connection
         self.getTags = getTags.GetTags(
-            os.path.join(os.path.join(os.path.dirname(__file__), os.pardir), 'all_tags.json')
-        )
+            os.path.join(os.path.join(os.path.dirname(__file__), os.pardir), 'all_tags.yaml'))
 
     # TODO: verify if required field exists [ami_id, count, public_ip]
     def verify_instance_fields(self):
@@ -31,14 +30,14 @@ class PodSetUp(object):
         for pod_item in podList:
             current_pod_setting = self.get_pod_settings(pod_item, pod_list_settings)[0]
             pod_count = int(current_pod_setting['count'])
-            print "Creating {0} {1} POD(s)".format(pod_count, pod_item)
+            logging.info("Creating %d %s POD(s)", pod_count, pod_item)
             # print '{0} == {1}'.format(pod_item, current_pod_setting)
             inst_settings = current_pod_setting['instance_settings']
             for inst_st in inst_settings:
                 associate_subnet_id = self.getTags.getValue(inst_st['associate_subnet'])
                 # create instance
                 self.conn.run_instances(str(inst_st['ami_id']))
-                print associate_subnet_id
+                logging.info(associate_subnet_id)
 
 
     # TODO: Update action

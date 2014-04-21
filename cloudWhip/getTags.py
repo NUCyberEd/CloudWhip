@@ -2,6 +2,8 @@ __author__ = 'shekarnh'
 
 import json
 import subprocess
+import yaml
+import logging
 
 
 class GetTags(object):
@@ -14,14 +16,14 @@ class GetTags(object):
         all_tags = subprocess.check_output(command.split())
         all_tags_json = json.loads(all_tags)
         with open(self.outTagFile, 'w') as outFile:
-            print "Updating Tags File"
-            json.dump(all_tags_json, outFile)
+            logging.info("Updating Tags File")
+            yaml.safe_dump(all_tags_json, outFile)
 
-    def getValue(self, key):
+    def getResourceID(self, resource_value):
         with open(self.outTagFile, 'r') as tagFile:
-            all_tags = json.load(tagFile)
+            all_tags = yaml.load(tagFile)
 
         tags = all_tags['Tags']
         for resource in tags:
-            if str(resource['Value']) == str(key):
+            if str(resource['Value']) == str(resource_value):
                 return str(resource['ResourceId'])

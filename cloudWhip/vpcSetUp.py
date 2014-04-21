@@ -1,6 +1,7 @@
 __author__ = 'shekar_n_h'
 
 import sys
+import logging
 
 
 class VpcSetUp(object):
@@ -17,7 +18,7 @@ class VpcSetUp(object):
         resultIds = {}
 
         if not len(vpcSettings):
-            print "VPC Setting is either missing or empty!"
+            logging.error("VPC Setting is either missing or empty!")
             sys.exit(2)
 
         verify_vpc = self.conn.get_all_vpcs(filters={"cidrBlock": vpc_setting['cidr_block']})
@@ -25,12 +26,12 @@ class VpcSetUp(object):
             vpc_id = self.conn.create_vpc(vpc_setting['cidr_block'], vpc_setting['instance_tenancy'],
                                          dry_run=dryRun_flag)
             vpc_id_str = str(vpc_id).split(':', 1)[1]
-            print "VPC Created -- {0}".format(vpc_id_str)
+            logging.info("VPC Created -- %s", vpc_id_str)
             resultIds['vpc'] = vpc_id_str
         else:
             vpc_id = verify_vpc.pop(0)
             vpc_id_str = str(vpc_id).split(':', 1)[1]
-            print "Resquested VPC already exists! -- {0}".format(vpc_id_str)
+            logging.warning("Resquested VPC already exists! -- %s", vpc_id_str)
         # Add name tag
         vpc_id.add_tag("Name", vpc_setting['name_tag'])
 
@@ -41,12 +42,12 @@ class VpcSetUp(object):
             if not len(verify_subnet):
                 subnet_id = self.conn.create_subnet(vpc_id_str, subnet_setting['subnet_cidr_block'], dryRun_flag)
                 subnet_id_str = str(subnet_id).split(':', 1)[1]
-                print "Created Subnet -- {0}".format(subnet_id_str)
+                logging.info("Created Subnet -- %s", subnet_id_str)
                 created_subnet.append(subnet_id_str)
             else:
                 subnet_id = verify_subnet.pop(0)
                 subnet_id_str = str(subnet_id).split(':', 1)[1]
-                print "Resquested Subnet already exists! -- {0}".format(subnet_id_str)
+                logging.warning("Resquested Subnet already exists! -- %s", subnet_id_str)
             subnet_id.add_tag("Name", subnet_setting['subnet_name_tag'])
         resultIds['subnets'] = created_subnet
         # close the connection
@@ -56,7 +57,7 @@ class VpcSetUp(object):
     # TODO: procedure to delete given VPC
     def deleteVPC(self, vpcSettings=[], dryRun_flag=False):
         if not len(vpcSettings):
-            print "VPC Setting is either missing or empty!"
+            logging.error("VPC Setting is either missing or empty!")
             sys.exit(2)
 
         for vpc_id in self.conn.get_all_vpcs():
@@ -75,5 +76,5 @@ class VpcSetUp(object):
 
     # TODO: Update action
     def updateVPC(self, vpcSettings=[], dryRun_flag=False):
-        print "This feature is under development"
+        logging.warning("This feature is under development")
         pass

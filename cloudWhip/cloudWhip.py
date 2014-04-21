@@ -6,6 +6,24 @@ import podSetUp
 import getConnection
 import argparse
 import sys
+import logging
+import os
+
+
+def setup_logging(
+        default_path=os.path.join(os.path.join(os.path.dirname(__file__), os.pardir), 'logging.yaml'),
+        default_level=logging.INFO
+):
+    """
+    Setup logging configuration
+    """
+    path = default_path
+    if os.path.exists(path):
+        with open(path, 'rt') as logConF:
+            logConfig = yaml.load(logConF.read())
+        logging.config.dictConfig(logConfig)
+    else:
+        logging.basicConfig(level=default_level)
 
 
 def setUpVPC(action, account_settings, vpc_settings, dryrun_flag):
@@ -42,6 +60,8 @@ def setUpPOD(action, account_settings, pod_settings, pod_list, dryrun_flag):
 
 
 def main():
+    # setup logging
+    setup_logging()
     # list the names of the pod to be created [default everything in the settings file is created]
     usage_msg = "%prog <component> <action> [parameters]"
 
@@ -71,10 +91,10 @@ def main():
     sel_action = str(args['action']).upper()
 
     if sel_component not in component_list:
-        print "Invalid component. Allowed components are: {0}".format(component_list)
+        logging.error("Invalid component. Allowed components are: %s", component_list)
         sys.exit(2)
     if sel_action not in action_type_list:
-        print "Invalid action. Allowed actions are: {0}".format(action_type_list)
+        logging.error("Invalid action. Allowed actions are: %s", action_type_list)
         sys.exit(2)
 
     #TODO: Use account settings from Boto config file

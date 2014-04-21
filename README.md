@@ -6,8 +6,9 @@ CloudWhip is a provisioning tool to conduct Cyber security labs on Amazon Cloud 
 Copy the setting.cfg.template as setting.cfg and update your AWS account information in its respective fields. Fill the respective VPC and POD component fields according to you lab requirements.
 
 ## Usage
+```
 python cloudWhip.py -c <component> -a <action> -s [settings]
-
+```
 ## Available Features
 * Create VPC, Subnets
 * Delete VPC, Subnets
@@ -20,5 +21,4 @@ python cloudWhip.py -c <component> -a <action> -s [settings]
 * Applying Route Tables
 * Applying Security groups
 * Add dryrun and pod to use arguments
-* Delete specific VPC, Subnet, Instance. 
-
+* Delete specific VPC, Subnet, Instance.
