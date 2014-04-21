@@ -1,8 +1,8 @@
 __author__ = 'shekarnh'
 
 from nose.tools import *
-
 import cloudWhip
+import os
 
 def setup():
     print "SETUP!"

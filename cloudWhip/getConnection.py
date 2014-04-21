@@ -2,6 +2,7 @@ __author__ = 'shekarnh'
 
 from boto.ec2 import connect_to_region
 from boto.vpc import VPCConnection
+import logging
 
 
 class GetConnection(object):

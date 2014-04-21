@@ -20,7 +20,7 @@ setup(
     url = "",
     install_requires=['nose', 'boto', 'awscli'],
     packages=['cloudWhip', 'tests'],
-    long_description=read('README'),
+    long_description=read('README.md'),
     classifiers=[
         "Development Status :: ",
         "Topic :: Utilities",

@@ -1,12 +1,15 @@
 __author__ = 'shekar_n_h'
 
 import getTags
+import os
 
 
 class PodSetUp(object):
     def __init__(self, ec2Connection):
         self.conn = ec2Connection
-        self.getTags = getTags.GetTags('../all_tags.json')
+        self.getTags = getTags.GetTags(
+            os.path.join(os.path.join(os.path.dirname(__file__), os.pardir), 'all_tags.json')
+        )
 
     # TODO: verify if required field exists [ami_id, count, public_ip]
     def verify_instance_fields(self):
