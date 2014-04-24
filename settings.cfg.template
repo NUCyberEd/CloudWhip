@@ -42,4 +42,4 @@ POD:
               ami_id: ami-178e927e
               associate_subnet: subnet_test2
               public_ip: True
-              key_name: shekar_opsW
+              key_name: [YOUR_KEY_PAIR_NAME]

@@ -2,12 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0b078ae2-29c7-4b4e-929c-fc631326631a" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cloudWhip/getTags.py" afterPath="$PROJECT_DIR$/cloudWhip/getTags.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cloudWhip/podSetUp.py" afterPath="$PROJECT_DIR$/cloudWhip/podSetUp.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/settings.cfg.template" afterPath="$PROJECT_DIR$/settings.cfg.template" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cloudWhip/vpcSetUp.py" afterPath="$PROJECT_DIR$/cloudWhip/vpcSetUp.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="botoWrapper.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -86,13 +81,22 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="vpcSetUp.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="vpcSetUp.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cloudWhip/vpcSetUp.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="106" column="75" selection-start="4724" selection-end="4724" vertical-scroll-proportion="0.39207047" vertical-offset="1641" max-vertical-offset="2502">
+            <state line="106" column="75" selection-start="4724" selection-end="4724" vertical-scroll-proportion="0.0" vertical-offset="1641" max-vertical-offset="2502">
               <folding>
                 <element signature="e#27#37#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="settings.cfg.template" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/settings.cfg.template">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="44" column="44" selection-start="1562" selection-end="1562" vertical-scroll-proportion="0.8734756" vertical-offset="219" max-vertical-offset="900">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -139,12 +143,12 @@
         <option value="$PROJECT_DIR$/logging.yaml" />
         <option value="$PROJECT_DIR$/settings.cfg" />
         <option value="$PROJECT_DIR$/all_tags.yaml" />
-        <option value="$PROJECT_DIR$/settings.cfg.template" />
         <option value="$PROJECT_DIR$/cloudWhip/getTags.py" />
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/cloudWhip/podSetUp.py" />
         <option value="$PROJECT_DIR$/cloudWhip/cloudWhip.py" />
         <option value="$PROJECT_DIR$/cloudWhip/vpcSetUp.py" />
+        <option value="$PROJECT_DIR$/settings.cfg.template" />
       </list>
     </option>
   </component>
@@ -510,10 +514,10 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-5" y="-1" width="1930" height="1086" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32916668" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.259375" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.259375" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26145834" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17606747" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -862,13 +866,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/settings.cfg.template">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="36" column="15" selection-start="1309" selection-end="1309" vertical-scroll-proportion="0.61585367" vertical-offset="244" max-vertical-offset="900">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tests/test.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="12" column="0" selection-start="126" selection-end="126" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="378">
@@ -915,10 +912,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/cloudWhip/vpcSetUp.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="106" column="75" selection-start="4724" selection-end="4724" vertical-scroll-proportion="0.39207047" vertical-offset="1641" max-vertical-offset="2502">
+        <state line="106" column="75" selection-start="4724" selection-end="4724" vertical-scroll-proportion="0.0" vertical-offset="1641" max-vertical-offset="2502">
           <folding>
             <element signature="e#27#37#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/settings.cfg.template">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="44" column="44" selection-start="1562" selection-end="1562" vertical-scroll-proportion="0.8734756" vertical-offset="219" max-vertical-offset="900">
+          <folding />
         </state>
       </provider>
     </entry>
