@@ -7,15 +7,16 @@ Copy the setting.cfg.template as setting.cfg and update your AWS account informa
 
 ## Usage
 ```
-python cloudWhip.py -c <component> -a <action> -s [settings]
+python cloudWhip.py -c <component> -a <action> [options]
 ```
 ## Available Features
 * Create VPC, Subnets
 * Delete VPC, Subnets
-* Run, Stop, Delete Instance
+* Run Instance
 
 ## TODO List
 * Quick Start Guide
+* Stop and Terminate Instances.
 * Update action for VPC, Subnets, Instances.
 * AWS Account information for boto config file.
 * Applying Route Tables

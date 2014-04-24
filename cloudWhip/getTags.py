@@ -9,17 +9,18 @@ import logging
 class GetTags(object):
     def __init__(self, tagFile):
         self.outTagFile = tagFile
+        self.logger = logging.getLogger(__name__)
 
-    def updateTagFile(self):
+    def update_tag_file(self):
         # requires awscli installed and credentials configured
         command = 'aws ec2 describe-tags'
         all_tags = subprocess.check_output(command.split())
         all_tags_json = json.loads(all_tags)
         with open(self.outTagFile, 'w') as outFile:
-            logging.info("Updating Tags File")
+            self.logger.info("Updating Tags File")
             yaml.safe_dump(all_tags_json, outFile)
 
-    def getResourceID(self, resource_value):
+    def get_resource_id(self, resource_value):
         with open(self.outTagFile, 'r') as tagFile:
             all_tags = yaml.load(tagFile)
 

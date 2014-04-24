@@ -10,18 +10,36 @@ VPC:
     subnet_settings:
             - subnet_name_tag: subnet_test1
               subnet_cidr_block: 10.0.1.0/24
+              # AWS Route Tables: http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html
+              # Target : Default to Internet Gateway associated with VPC
+              route_table: {Destination: [0.0.0.0/0], Target: []}
             - subnet_name_tag: subnet_test2
               subnet_cidr_block: 10.0.2.0/24
+              route_table: {Destination: [0.0.0.0/0], Target: []}
 
 POD:
     - name: student
       count: 2
       instance_settings:
-            - name:
-              ami_id:
-              subnet_id:
-              public_ip:
+            - name: Amazon Linux 1
+              count: 1
+              ami_id: ami-178e927e
+              associate_subnet: subnet_test1
+              public_ip: True
+              key_name: [YOUR_KEY_PAIR_NAME]
+            - name: Amazon Linux 2
+              count: 1
+              ami_id: ami-178e927e
+              associate_subnet: subnet_test1
+              public_ip: True
+              key_name: [YOUR_KEY_PAIR_NAME]
 
     - name: dmz
-      count:
+      count: 1
       instance_settings:
+            - name: Amazon Linux 1
+              count: 1
+              ami_id: ami-178e927e
+              associate_subnet: subnet_test2
+              public_ip: True
+              key_name: shekar_opsW

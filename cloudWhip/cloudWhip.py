@@ -24,36 +24,37 @@ def setup_logging(
         logging.config.dictConfig(logConfig)
     else:
         logging.basicConfig(level=default_level)
+    return logging.getLogger('cloudWhip')
 
 
-def setUpVPC(action, account_settings, vpc_settings, dryrun_flag):
+def set_up_vpc(action, account_settings, vpc_settings, dryrun_flag):
 
     getConn = getConnection.GetConnection(account_settings)
     vpc_conn = getConn.vpc_connect()
 
     vpc_setup = vpcSetUp.VpcSetUp(vpc_conn)
     if action == "CREATE":
-        vpc_setup.createVPC(vpc_settings, dryrun_flag)
+        vpc_setup.create_vpc(vpc_settings, dryrun_flag)
     elif action == "UPDATE":
-        pass
+        vpc_setup.update_vpc(vpc_settings, dryrun_flag)
     elif action == "DELETE":
-        vpc_setup.deleteVPC(vpc_settings, dryrun_flag)
+        vpc_setup.delete_vpc(vpc_settings, dryrun_flag)
 
     # close connections
     vpc_conn.close()
 
 
-def setUpPOD(action, account_settings, pod_settings, pod_list, dryrun_flag):
+def set_up_pod(action, account_settings, pod_settings, pod_list, dryrun_flag):
     getConn = getConnection.GetConnection(account_settings)
     ec2_conn = getConn.ec2_connect()
 
     pod_setup = podSetUp.PodSetUp(ec2_conn)
     if action == "CREATE":
-        pod_setup.createPOD(pod_settings, pod_list, dryrun_flag)
+        pod_setup.create_pod(pod_settings, pod_list, dryrun_flag)
     elif action == "UPDATE":
-        pass
+        pod_setup.update_pod(pod_settings, pod_list, dryrun_flag)
     elif action == "DELETE":
-        pass
+        pod_setup.delete_pod(pod_settings, pod_list, dryrun_flag)
 
     # close connections
     ec2_conn.close()
@@ -61,9 +62,9 @@ def setUpPOD(action, account_settings, pod_settings, pod_list, dryrun_flag):
 
 def main():
     # setup logging
-    setup_logging()
+    logger = setup_logging()
     # list the names of the pod to be created [default everything in the settings file is created]
-    usage_msg = "%prog <component> <action> [parameters]"
+    usage_msg = "%prog -c <component> -a <action> [options]"
 
     parser = argparse.ArgumentParser(description=usage_msg)
     component_list = ["VPC", "POD"]
@@ -78,7 +79,7 @@ def main():
 
     #TODO: Add dryrun flag parameter and pod to use
     dryRun = False
-    pod_to_use = []     # default all pods in the config file are used
+    pod_to_use = ['dmz']     # default all pods in the config file are used
 
     args = vars(parser.parse_args())
 
@@ -91,10 +92,10 @@ def main():
     sel_action = str(args['action']).upper()
 
     if sel_component not in component_list:
-        logging.error("Invalid component. Allowed components are: %s", component_list)
+        logger.error("Invalid component. Allowed components are: %s", component_list)
         sys.exit(2)
     if sel_action not in action_type_list:
-        logging.error("Invalid action. Allowed actions are: %s", action_type_list)
+        logger.error("Invalid action. Allowed actions are: %s", action_type_list)
         sys.exit(2)
 
     #TODO: Use account settings from Boto config file
@@ -107,9 +108,9 @@ def main():
 
     # perform requested action on the component
     if sel_component == "VPC":
-        setUpVPC(sel_action, aws_account_settings, vpc_setting, dryRun)
+        set_up_vpc(sel_action, aws_account_settings, vpc_setting, dryRun)
     elif sel_component == "POD":
-        setUpPOD(sel_action, aws_account_settings, pod_list_settings, pod_to_use, dryRun)
+        set_up_pod(sel_action, aws_account_settings, pod_list_settings, pod_to_use, dryRun)
 
 
 if __name__ == "__main__":
