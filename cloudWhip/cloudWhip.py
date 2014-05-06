@@ -28,7 +28,9 @@ def setup_logging(
 
 
 def set_up_vpc(action, account_settings, vpc_settings, dryrun_flag):
-
+    """
+    VPC setup options
+    """
     getConn = getConnection.GetConnection(account_settings)
     vpc_conn = getConn.vpc_connect()
 
@@ -45,6 +47,9 @@ def set_up_vpc(action, account_settings, vpc_settings, dryrun_flag):
 
 
 def set_up_pod(action, account_settings, pod_settings, pod_list, dryrun_flag):
+    """
+    POD setup options
+    """
     getConn = getConnection.GetConnection(account_settings)
     ec2_conn = getConn.ec2_connect()
 
@@ -73,13 +78,12 @@ def main():
     action_type_list = ["CREATE", "UPDATE", "DELETE"]
     parser.add_argument('-a', '--action', help='Specifies the action to be performed. '
                                                'One of {0}'.format(action_type_list), required=True)
-
+    parser.add_argument('-p', '--podlist', help='Specifies the pod list upon which the action is performed. '
+                                               'Defaults to all entries found in the config file', required=False)
     parser.add_argument('-s', '--setting', help='Specifies the absolute path to the settings file',
                         default='../settings.cfg', required=False)
-
-    #TODO: Add dryrun flag parameter and pod to use
-    dryRun = False
-    pod_to_use = ['dmz']     # default all pods in the config file are used
+    parser.add_argument('-d', '--dryrun', help='Specifies boolean value for dryrun flag. Default set to False',
+                        default=False, required=False)
 
     args = vars(parser.parse_args())
 
@@ -90,6 +94,12 @@ def main():
 
     sel_component = str(args['component']).upper()
     sel_action = str(args['action']).upper()
+    if str(args['dryrun']).lower() in 'true':
+        dryRun = True
+    else:
+        dryRun = False
+
+    print dryRun
 
     if sel_component not in component_list:
         logger.error("Invalid component. Allowed components are: %s", component_list)
@@ -110,6 +120,10 @@ def main():
     if sel_component == "VPC":
         set_up_vpc(sel_action, aws_account_settings, vpc_setting, dryRun)
     elif sel_component == "POD":
+        if not args['podlist']:
+            pod_to_use = []
+        else:
+            pod_to_use = str(args['podlist']).lower().split(",")     # default all pods in the config file are used
         set_up_pod(sel_action, aws_account_settings, pod_list_settings, pod_to_use, dryRun)
 
 

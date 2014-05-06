@@ -3,3 +3,4 @@ settings.cfg
 *.json
 all_tags*
 *.log
+*.xml

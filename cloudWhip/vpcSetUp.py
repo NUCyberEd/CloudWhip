@@ -13,7 +13,7 @@ class VpcSetUp(object):
             os.path.join(os.path.join(os.path.dirname(__file__), os.pardir), 'all_tags.yaml'))
         self.logger = logging.getLogger(__name__)
 
-    # TODO: verify if required filed exists
+    # TODO: verify if required filed exists[cidr_block]
     def verify_vpc_fields(self):
         pass
 
@@ -58,6 +58,7 @@ class VpcSetUp(object):
             self.logger.error("VPC Setting is either missing or empty!")
             sys.exit(2)
 
+        # verify if the vpc exists
         verify_vpc = self.conn.get_all_vpcs(filters={"cidrBlock": vpc_setting['cidr_block']})
         if not len(verify_vpc):
             vpc_id = self.conn.create_vpc(vpc_setting['cidr_block'], vpc_setting['instance_tenancy'],
