@@ -3,7 +3,16 @@
 CloudWhip is a provisioning tool to conduct Cyber security labs on Amazon Cloud Services. Using CloudWhip course instructors can easily deploy and manage lab environments using a single configuration file.
 
 ## Setup
+
+```
+python setup.py install
+```
 Copy the setting.cfg.template as setting.cfg and update your AWS account information in its respective fields. Fill the respective VPC and POD component fields according to your lab requirements.
+
+## Requires
+* boto
+* awscli
+* nose
 
 ## Usage
 ```
