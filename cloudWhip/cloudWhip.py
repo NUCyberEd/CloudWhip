@@ -33,8 +33,9 @@ def set_up_vpc(action, account_settings, vpc_settings, dryrun_flag):
     """
     getConn = getConnection.GetConnection(account_settings)
     vpc_conn = getConn.vpc_connect()
+    ec2_conn = getConn.ec2_connect()
 
-    vpc_setup = vpcSetUp.VpcSetUp(vpc_conn)
+    vpc_setup = vpcSetUp.VpcSetUp(vpc_conn, ec2_conn)
     if action == "CREATE":
         vpc_setup.create_vpc(vpc_settings, dryrun_flag)
     elif action == "UPDATE":
@@ -99,7 +100,7 @@ def main():
     else:
         dryRun = False
 
-    print dryRun
+    logger.debug("DryRun: %s", dryRun)
 
     if sel_component not in component_list:
         logger.error("Invalid component. Allowed components are: %s", component_list)

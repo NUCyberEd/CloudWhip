@@ -16,6 +16,12 @@ VPC:
             - subnet_name_tag: subnet_test2
               subnet_cidr_block: 10.0.2.0/24
               route_table: {Destination: [0.0.0.0/0], Target: []}
+    security_groups:
+            - sg_name: grant_ssh_access
+              description: Gives SSH access to the VPC network
+              associate_vpc: vpc_test
+              rules: [["tcp", "22", "22", "0.0.0.0/0", !!null '']]
+
 
 POD:
     - name: student
@@ -25,12 +31,14 @@ POD:
               count: 1
               ami_id: ami-178e927e
               associate_subnet: subnet_test1
+              associate_sg: [grant_ssh_access]
               public_ip: True
               key_name: [YOUR_KEY_PAIR_NAME]
             - name: Amazon Linux 2
               count: 1
               ami_id: ami-178e927e
               associate_subnet: subnet_test1
+              associate_sg: [grant_ssh_access]
               public_ip: True
               key_name: [YOUR_KEY_PAIR_NAME]
 
@@ -41,5 +49,6 @@ POD:
               count: 1
               ami_id: ami-178e927e
               associate_subnet: subnet_test2
+              associate_sg: [grant_ssh_access]
               public_ip: True
               key_name: [YOUR_KEY_PAIR_NAME]

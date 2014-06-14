@@ -4,3 +4,8 @@ settings.cfg
 all_tags*
 *.log
 *.xml
+dist/
+build/
+*.egg-info/
+docs/
+tests/test1.py

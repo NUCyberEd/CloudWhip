@@ -4,11 +4,14 @@ import sys
 import logging
 import getTags
 import os
+import secGroups
+import time
 
 
 class VpcSetUp(object):
-    def __init__(self, vpcConnection):
+    def __init__(self, vpcConnection, ec2Connection):
         self.conn = vpcConnection
+        self.ec2Conn = ec2Connection  # ec2 connection for security groups
         self.getTags = getTags.GetTags(
             os.path.join(os.path.join(os.path.dirname(__file__), os.pardir), 'all_tags.yaml'))
         self.logger = logging.getLogger(__name__)
@@ -21,19 +24,28 @@ class VpcSetUp(object):
         # check if gateway exists and attached before
         if not self.conn.get_all_internet_gateways(filters={'attachment.vpc-id': v_id.id}):
             internet_gw = self.conn.create_internet_gateway()
-            # add name tag for Internet Gateway
-            internet_gw.add_tag("Name", v_setting['name_tag'] + "_internet_gw")
             #attach Internet Gateway
             self.conn.attach_internet_gateway(internet_gw.id, v_id.id)
+            # add name tag for Internet Gateway
+            internet_gw.add_tag("Name", v_setting['name_tag'] + "_internet_gw")
             self.logger.info("Internet Gateway Created and attached-- %s", internet_gw.id)
-            return internet_gw
+            internet_gw_id = internet_gw.id
+        else:
+            internet_gw_id = self.conn.get_all_internet_gateways(filters={'attachment.vpc-id': v_id.id})[0]
 
-    def set_up_route_table(self, v_id, sub_id, int_gw, sub_setting):
+        return internet_gw_id
+
+    def set_up_route_table(self, v_id, sub_id, int_gw_id, sub_setting):
         # create route tables
         route_table = self.conn.create_route_table(v_id.id)
-        route_table.add_tag("Name", sub_setting['subnet_name_tag'] + "_rt")
+
         # associate with the subnet
         self.conn.associate_route_table(route_table.id, sub_id.id)
+        # TODO: Find a better way
+        time.sleep(3)
+        # add tag
+        route_table.add_tag("Name", sub_setting['subnet_name_tag'] + "_rt")
+
         # add routes
         rules_dict = sub_setting['route_table']
         destination_list = rules_dict['Destination']
@@ -43,10 +55,13 @@ class VpcSetUp(object):
             try:
                 target = target_list[destination_list.index(dest)]
                 if not target:
-                    target = int_gw.id
+                    target = int_gw_id
             except IndexError:
-                target = int_gw.id
-            self.conn.create_route(route_table.id, str(dest), gateway_id=target)
+                target = int_gw_id
+            rt_id = self.conn.create_route(route_table.id, str(dest), gateway_id=target)
+            while not rt_id:
+                self.logger.debug("Route for %s created but waiting for it to be availabel", sub_setting['subnet_name_tag'])
+
         self.logger.info("Route Table and Routes Created for subnet -- %s", sub_setting['subnet_name_tag'])
 
     def create_vpc(self, vpcSettings=[], dryRun_flag=False):
@@ -67,6 +82,8 @@ class VpcSetUp(object):
             resultIds['vpc'] = vpc_id.id
         else:
             vpc_id = verify_vpc.pop(0)
+            while vpc_id.state != 'available':
+                self.logger.debug("VPC %s created but waiting for it to be availabel", vpc_setting['name_tag'])
             self.logger.warning("Resquested VPC already exists! -- %s", vpc_id.id)
         # Add name tag
         vpc_id.add_tag("Name", vpc_setting['name_tag'])
@@ -88,8 +105,21 @@ class VpcSetUp(object):
                 self.logger.warning("Resquested Subnet already exists! -- %s", subnet_id.id)
             subnet_id.add_tag("Name", subnet_setting['subnet_name_tag'])
         resultIds['subnets'] = created_subnet
+
+        # update tag file
+        self.getTags.update_tag_file()
+
+        # create or update security groups
+        for sg_setting in vpc_setting['security_groups']:
+            associate_vpc_id = self.getTags.get_resource_id(sg_setting['associate_vpc'])
+            sg_setup = secGroups.SecurityGroups(self.ec2Conn)
+            sg_id = sg_setup.create_security_groups(sg_setting['sg_name'], sg_setting['description'],
+                                            associate_vpc_id, sg_setting['rules'])
+
         # close the connection
         self.conn.close()
+        self.ec2Conn.close()
+
         return resultIds
         
     # TODO: procedure to delete given VPC
@@ -101,6 +131,15 @@ class VpcSetUp(object):
 
         # self.getTags.update_tag_file()
         for vpc_id in self.conn.get_all_vpcs():
+            # detach and delete security groups
+            main_sgs = self.conn.get_all_security_groups(filters={"group-name": 'default', "vpc-id": vpc_id.id})
+            attached_sgs = self.conn.get_all_security_groups(filters={"vpc-id": vpc_id.id})
+            if len(attached_sgs):
+                for attached_sg in attached_sgs:
+                    if str(attached_sg.id) != str(main_sgs[0].id):
+                        self.ec2Conn.delete_security_group(group_id=attached_sg.id)
+                        self.logger.info("Deleted Security Group -- %s", attached_sg.id)
+
             # detach and delete internet gateways
             attached_internet_gw = self.conn.get_all_internet_gateways(filters={"attachment.vpc-id": vpc_id.id})
             if len(attached_internet_gw):
@@ -117,11 +156,11 @@ class VpcSetUp(object):
                     self.logger.info("Deleted Subnet -- %s", s_id.id)
 
             # delete route tables
-            main_route_table = self.conn.get_all_route_tables(filters={"association.main": 'true'})
-            attached_route_table = self.conn.get_all_route_tables(filters={"vpc-id": vpc_id.id})
-            if len(attached_route_table):
-                for rt in attached_route_table:
-                    if str(rt.id) != str(main_route_table[0].id):
+            main_route_tables = self.conn.get_all_route_tables(filters={"association.main": 'true', "vpc-id": vpc_id.id})
+            attached_route_tables = self.conn.get_all_route_tables(filters={"vpc-id": vpc_id.id})
+            if len(attached_route_tables):
+                for rt in attached_route_tables:
+                    if str(rt.id) != str(main_route_tables[0].id):
                         self.conn.delete_route_table(rt.id)
                         self.logger.info("Deleted Route Table -- %s", rt.id)
 
