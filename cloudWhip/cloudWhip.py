@@ -79,7 +79,7 @@ def main():
     action_type_list = ["CREATE", "UPDATE", "DELETE"]
     parser.add_argument('-a', '--action', help='Specifies the action to be performed. '
                                                'One of {0}'.format(action_type_list), required=True)
-    parser.add_argument('-p', '--podlist', help='Specifies the pod list upon which the action is performed. '
+    parser.add_argument('-l', '--list', help='Specifies the list of component names upon which the action is performed.'
                                                'Defaults to all entries found in the config file', required=False)
     parser.add_argument('-s', '--setting', help='Specifies the absolute path to the settings file',
                         default='../settings.cfg', required=False)
@@ -121,10 +121,10 @@ def main():
     if sel_component == "VPC":
         set_up_vpc(sel_action, aws_account_settings, vpc_setting, dryRun)
     elif sel_component == "POD":
-        if not args['podlist']:
+        if not args['list']:
             pod_to_use = []
         else:
-            pod_to_use = str(args['podlist']).lower().split(",")     # default all pods in the config file are used
+            pod_to_use = str(args['list']).lower().split(",")     # default all pods in the config file are used
         set_up_pod(sel_action, aws_account_settings, pod_list_settings, pod_to_use, dryRun)
 
 
