@@ -27,7 +27,7 @@ def setup_logging(
     return logging.getLogger('cloudWhip')
 
 
-def set_up_vpc(action, account_settings, vpc_settings, dryrun_flag):
+def set_up_vpc(action, account_settings, vpc_settings, vpc_list, dryrun_flag):
     """
     VPC setup options
     """
@@ -37,11 +37,11 @@ def set_up_vpc(action, account_settings, vpc_settings, dryrun_flag):
 
     vpc_setup = vpcSetUp.VpcSetUp(vpc_conn, ec2_conn)
     if action == "CREATE":
-        vpc_setup.create_vpc(vpc_settings, dryrun_flag)
+        vpc_setup.create_vpc(vpc_settings, vpc_list, dryrun_flag)
     elif action == "UPDATE":
-        vpc_setup.update_vpc(vpc_settings, dryrun_flag)
+        vpc_setup.update_vpc(vpc_settings, vpc_list, dryrun_flag)
     elif action == "DELETE":
-        vpc_setup.delete_vpc(vpc_settings, dryrun_flag)
+        vpc_setup.delete_vpc(vpc_settings, vpc_list, dryrun_flag)
 
     # close connections
     vpc_conn.close()
@@ -114,18 +114,24 @@ def main():
     config_stream = open(args['setting'])
     settings = yaml.load(config_stream)
     aws_account_settings = settings['ACCOUNT']
-    pod_list_settings = settings['POD']
-    vpc_setting = settings['VPC']
+    pod_settings = settings['POD']
+    vpc_settings = settings['VPC']
 
     # perform requested action on the component
+    vpc_to_use = []
+    pod_to_use = []
     if sel_component == "VPC":
-        set_up_vpc(sel_action, aws_account_settings, vpc_setting, dryRun)
+        if not args['list']:
+            vpc_to_use = []
+        else:
+            vpc_to_use = str(args['list']).lower().split(",")
+        set_up_vpc(sel_action, aws_account_settings, vpc_settings, vpc_to_use, dryRun)
     elif sel_component == "POD":
         if not args['list']:
             pod_to_use = []
         else:
             pod_to_use = str(args['list']).lower().split(",")     # default all pods in the config file are used
-        set_up_pod(sel_action, aws_account_settings, pod_list_settings, pod_to_use, dryRun)
+        set_up_pod(sel_action, aws_account_settings, pod_settings, pod_to_use, dryRun)
 
 
 if __name__ == "__main__":

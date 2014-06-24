@@ -32,7 +32,7 @@ python cloudWhip.py -h
 
 ### Output:
 ```
-usage: cloudWhip.py [-h] -c COMPONENT -a ACTION [-p PODLIST] [-s SETTING]
+usage: cloudWhip.py [-h] -c COMPONENT -a ACTION [-l LIST] [-s SETTING]
                     [-d DRYRUN]
 
 %prog -c <component> -a <action> [options]
@@ -45,10 +45,9 @@ optional arguments:
   -a ACTION, --action ACTION
                         Specifies the action to be performed. One of
                         ['CREATE', 'UPDATE', 'DELETE']
-  -p PODLIST, --podlist PODLIST
-                        Specifies the pod list upon which the action is
-                        performed. Defaults to all entries found in the config
-                        file
+  -l LIST, --list LIST  Specifies the list of component names upon which the
+                        action is performed.Defaults to all entries found in
+                        the config file
   -s SETTING, --setting SETTING
                         Specifies the absolute path to the settings file
   -d DRYRUN, --dryrun DRYRUN
@@ -61,6 +60,3 @@ optional arguments:
 * Stop and Terminate Instances.
 * Update action for VPC, Subnets, Instances.
 * AWS Account information from boto config file.
-* Applying Route Tables
-* Applying Security groups
-* Delete specific VPC, Subnet, Instance.

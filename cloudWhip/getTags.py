@@ -4,6 +4,7 @@ import json
 import subprocess
 import yaml
 import logging
+import sys
 
 
 class GetTags(object):
@@ -28,3 +29,6 @@ class GetTags(object):
         for resource in tags:
             if str(resource['Value']) == str(resource_value):
                 return str(resource['ResourceId'])
+
+        self.logger.error("{0} resource name not found in the tag file".format(resource_value))
+        sys.exit(2)

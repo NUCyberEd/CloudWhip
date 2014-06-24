@@ -27,7 +27,7 @@ class PodSetUp(object):
                 pod_settings = p_setting
                 break
         if not len(pod_settings):
-            self.logger.error("{0} POD Name not found in the config file".format(name))
+            self.logger.error("'{0}' POD Name not found in the config file".format(name))
             sys.exit(2)
         return pod_settings
 
@@ -69,7 +69,7 @@ class PodSetUp(object):
                     # print instance
 
                     # wait for instance to run
-                    self.logger.info("Instance %s launched but waiting for it to run", inst_st['name'])
+                    self.logger.info("Instance %s launched but waiting for it to run", inst_st['inst_name'])
                     while instance.state != 'running':
                         sys.stdout.write('. ')
                         sys.stdout.flush()
@@ -77,11 +77,11 @@ class PodSetUp(object):
                         instance.update()
                     sys.stdout.write('\n')
                     sys.stdout.flush()
-                    self.logger.info("Instance %s launched and running", inst_st['name'])
+                    self.logger.info("Instance %s launched and running", inst_st['inst_name'])
 
                     # add tag
                     self.logger.debug('Adding Name tag')
-                    instance.add_tag("Name", inst_st['name'])
+                    instance.add_tag("Name", inst_st['inst_name'])
 
     # TODO: Delete action not complete
     def delete_pod(self, podSettings=[], podList=[], dryRun_flag=False):
@@ -122,7 +122,7 @@ class PodSetUp(object):
                 # print instance
 
                 # wait for instance to run
-                self.logger.info("Instance %s launched but waiting for it to run", inst_st['name'])
+                self.logger.info("Instance %s launched but waiting for it to run", inst_st['inst_name'])
                 while instance.state != 'running':
                     sys.stdout.write('. ')
                     sys.stdout.flush()
@@ -130,7 +130,7 @@ class PodSetUp(object):
                     instance.update()
                 sys.stdout.write('\n')
                 sys.stdout.flush()
-                self.logger.info("Instance %s launched and running", inst_st['name'])
+                self.logger.info("Instance %s launched and running", inst_st['inst_name'])
 
     # TODO: Update action
     def update_pod(self, podSettings=[], podList=[], dryRun_flag=False):
