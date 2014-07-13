@@ -58,5 +58,6 @@ optional arguments:
 ## TODO List
 * Quick Start Guide
 * Stop and Terminate Instances.
+* Generate output file
 * Update action for VPC, Subnets, Instances.
 * AWS Account information from boto config file.

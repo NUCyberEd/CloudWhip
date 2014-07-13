@@ -26,9 +26,26 @@ class GetTags(object):
             all_tags = yaml.load(tagFile)
 
         tags = all_tags['Tags']
+        resource_id_list = []
         for resource in tags:
-            if str(resource['Value']) == str(resource_value):
-                return str(resource['ResourceId'])
+            if str(resource['Value']).startswith(str(resource_value)):
+                resource_id_list.append(str(resource['ResourceId']))
+
+        return resource_id_list
 
         self.logger.error("{0} resource name not found in the tag file".format(resource_value))
+        sys.exit(2)
+
+    def get_resource_value(self, resource_id):
+        with open(self.outTagFile, 'r') as tagFile:
+            all_tags = yaml.load(tagFile)
+
+        tags = all_tags['Tags']
+        resource_value = None
+        for resource in tags:
+            if str(resource['ResourceId']) in str(resource_id).lower():
+                resource_value = resource['Value']
+                return resource_value
+
+        self.logger.error("{0} resource id not found in the tag file".format(resource_id))
         sys.exit(2)

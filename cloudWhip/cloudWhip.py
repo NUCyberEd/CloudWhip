@@ -53,8 +53,9 @@ def set_up_pod(action, account_settings, pod_settings, pod_list, dryrun_flag):
     """
     getConn = getConnection.GetConnection(account_settings)
     ec2_conn = getConn.ec2_connect()
+    vpc_conn = getConn.vpc_connect()
 
-    pod_setup = podSetUp.PodSetUp(ec2_conn)
+    pod_setup = podSetUp.PodSetUp(ec2_conn, vpc_conn)
     if action == "CREATE":
         pod_setup.create_pod(pod_settings, pod_list, dryrun_flag)
     elif action == "UPDATE":

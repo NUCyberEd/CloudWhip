@@ -1,22 +1,24 @@
 ACCOUNT:
-    connect_to_region: us-east-1 # http://docs.aws.amazon.com/general/latest/gr/rande.html
-    aws_access_key_id: YOUR_AWS_ACCESS_KEY_ID
-    aws_secret_access_key: YOUR_AWS_SECRET_ACCESS_KEY
+    connect_to_region: [REGION] # http://docs.aws.amazon.com/general/latest/gr/rande.html
+    aws_access_key_id: [YOUR_AWS_ACCESS_KEY_ID]
+    aws_secret_access_key: [YOUR_AWS_SECRET_ACCESS_KEY]
 
 VPC:
-    name_tag: vpc_test
-    cidr_block: 10.0.0.0/20
-    instance_tenancy: default
-    subnet_settings:
-            - subnet_name_tag: subnet_test1
+    - name: vpc_test
+      cidr_block: 10.0.0.0/20
+      instance_tenancy: default
+      subnet_settings:
+            - subnet_group_name: subnet_test1
+              count: 1
               subnet_cidr_block: 10.0.1.0/24
               # AWS Route Tables: http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html
               # Target : Default to Internet Gateway associated with VPC
               route_table: {Destination: [0.0.0.0/0], Target: []}
-            - subnet_name_tag: subnet_test2
-              subnet_cidr_block: 10.0.2.0/24
+            - subnet_group_name: subnet_test2
+              count: 1
+              subnet_cidr_block: 10.0.11.0/24
               route_table: {Destination: [0.0.0.0/0], Target: []}
-    security_groups:
+      security_groups:
             - sg_name: grant_ssh_access
               description: Gives SSH access to the VPC network
               associate_vpc: vpc_test
@@ -25,30 +27,30 @@ VPC:
 
 POD:
     - name: student
-      count: 2
+      # number of PODs per subnet group
+      count: 1
+      associate_subnet_group_name: subnet_test1
       instance_settings:
-            - name: Amazon Linux 1
-              count: 1
+            - inst_name: Amazon Linux 1
               ami_id: ami-178e927e
-              associate_subnet: subnet_test1
-              associate_sg: [grant_ssh_access]
-              public_ip: True
+              associate_sg: grant_ssh_access
+              public_ip: !!bool 'True'
+              private_ip: x.x.x.$1  # wild card bits allowed only at the beginning or end of the octet; $1, $23, 1$, 2$ are valid but  1$2, 2$1 are invalid
               key_name: [YOUR_KEY_PAIR_NAME]
-            - name: Amazon Linux 2
-              count: 1
+            - inst_name: Amazon Linux 2
               ami_id: ami-178e927e
-              associate_subnet: subnet_test1
-              associate_sg: [grant_ssh_access]
-              public_ip: True
+              associate_sg: grant_ssh_access
+              public_ip: !!bool 'True'
+              private_ip: x.x.x.$2
               key_name: [YOUR_KEY_PAIR_NAME]
 
     - name: dmz
       count: 1
+      associate_subnet_group_name: subnet_test2
       instance_settings:
-            - name: Amazon Linux 1
+            - inst_name: Amazon Linux 1
               count: 1
               ami_id: ami-178e927e
-              associate_subnet: subnet_test2
-              associate_sg: [grant_ssh_access]
-              public_ip: True
+              associate_sg:
+              public_ip: !!bool 'False'
               key_name: [YOUR_KEY_PAIR_NAME]

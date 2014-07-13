@@ -11,19 +11,19 @@ def read(fname):
 
 setup(
     name = "cloudWhip",
-    version = "0.0.1",
+    version = "1.0.0",
     author = "Shekar N H",
     author_email = "",
     description = "",
     license = "",
     keywords = "",
     url = "",
-    install_requires=['nose', 'boto', 'awscli'],
+    install_requires=['nose', 'boto', 'awscli', 'ipaddress'],
     packages=['cloudWhip', 'tests'],
     long_description=read('README.md'),
     classifiers=[
         "Development Status :: ",
         "Topic :: Utilities",
-        "License :: ",
+        "License :: MIT",
     ],
 )
