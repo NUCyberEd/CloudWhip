@@ -66,6 +66,7 @@ class PodSetUp(object):
             current_pod_subnet_reserved_instance_ip = {}    # Dict containing subnet_id: reserved_private_ips
             current_pod_subnet_avail_hosts = {}     # Dict containing subnet_id: list of avail hosts
             subnet_available_hosts = []
+
             for subnet_id, subnet_cidr in current_pod_subent_cidr.iteritems():
                 subnet_available_hosts = self.ipAddrBlks.get_subnet_hosts(subnet_cidr)
                 reserved_instances_private_ip = []

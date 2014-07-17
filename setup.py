@@ -18,7 +18,7 @@ setup(
     license = "",
     keywords = "",
     url = "",
-    install_requires=['nose', 'boto', 'awscli', 'ipaddress'],
+    install_requires=['nose', 'boto', 'awscli', 'ipaddress', 'pyyaml'],
     packages=['cloudWhip', 'tests'],
     long_description=read('README.md'),
     classifiers=[

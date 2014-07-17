@@ -13,6 +13,8 @@ Copy the setting.cfg.template as setting.cfg and update your AWS account informa
 * boto
 * awscli
 * nose
+* ipaddress
+* pyyaml
 
 ## Usage
 ```
@@ -20,9 +22,8 @@ python cloudWhip.py -c <component> -a <action> [options]
 ```
 
 ## Available Features
-* Create VPC, Subnets
-* Delete VPC, Subnets
-* Run Instance
+* Create VPC, Subnets, PODs
+* Delete VPC, Subnets, PODs
 
 Try help command to list all available arguments
 
