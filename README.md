@@ -56,6 +56,10 @@ optional arguments:
                         to False
 ```
 
+## Documentation:
+
+Documentation is now available at: [CloudWhip] (http://nucybered.github.io/CloudWhip/index.html)
+
 ## TODO List
 * Idempotence for POD creation.
 * Generate output file
