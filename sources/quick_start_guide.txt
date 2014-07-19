@@ -84,7 +84,7 @@ You should get the following as output::
 
 The two required arguments here are **--component** and **--action**. The **-a** argument specifies what action you want to perform (``create``/ ``delete``/ ``update``) on the component specified with **-c** argument, which is either ``vpc`` or ``pod``.
 
-Now let us use these arguments for following four main actions that you can perform with CloudWhip. The commands used in the following section refers to example from **settings.cfg.template1**
+Now let us use these arguments for following four main actions that you can perform with CloudWhip. The commands used in the following section refers to example from **settings.cfg.template**
 
 1. Create VPC and Subnets with Security Groups
 -----------------------------------------------
