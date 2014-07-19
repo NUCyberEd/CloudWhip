@@ -98,6 +98,10 @@ class PodSetUp(object):
                             sys.exit(2)
                         # check again to be safe
                         if current_inst_private_ip is not None:
+                            inst_key_name = None
+                            if inst_st['key_name'] is not None:
+                                inst_key_name = inst_st['key_name']
+
                             if inst_st['public_ip']:
                                 # creating interfaces is a hack to assign public ip for instances in VPCs
                                 pub_interface = ec2.networkinterface.NetworkInterfaceSpecification(
@@ -106,11 +110,11 @@ class PodSetUp(object):
                                     private_ip_address=current_inst_private_ip)
                                 pub_interfaces = ec2.networkinterface.NetworkInterfaceCollection(pub_interface)
                                 reservation = self.conn.run_instances(str(inst_st['ami_id']),
-                                                                      key_name=inst_st['key_name'],
+                                                                      key_name=inst_key_name,
                                                                       network_interfaces=pub_interfaces)
                             else:
                                 reservation = self.conn.run_instances(str(inst_st['ami_id']),
-                                                                      key_name=inst_st['key_name'],
+                                                                      key_name=inst_key_name,
                                                                       subnet_id=subnet_id,
                                                                       private_ip_address=current_inst_private_ip)
                             instance = reservation.instances[0]
