@@ -53,4 +53,5 @@ POD:
               ami_id: ami-178e927e
               associate_sg:
               public_ip: !!bool 'False'
+              private_ip: x.x.x.x
               key_name: [YOUR_KEY_PAIR_NAME]

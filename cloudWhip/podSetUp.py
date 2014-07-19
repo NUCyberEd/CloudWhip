@@ -136,9 +136,10 @@ class PodSetUp(object):
 
                             # add tag
                             self.logger.debug('Adding Name tag')
-                            current_inst_name_tag = "{0}:{1}:{2}".format(self.getTags.get_resource_value(subnet_id),
-                                                                         inst_st['inst_name'],
-                                                                         cnt)
+                            current_inst_name_tag = "{0}:{1}:{2}:{3}".format(self.getTags.get_resource_value(subnet_id),
+                                                                             current_pod_setting['name'],
+                                                                             inst_st['inst_name'],
+                                                                             cnt)
                             instance.add_tag("Name", current_inst_name_tag)
 
     def delete_pod(self, podSettings=[], podList=[], dryRun_flag=False):

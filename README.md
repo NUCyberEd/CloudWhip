@@ -57,8 +57,7 @@ optional arguments:
 ```
 
 ## TODO List
-* Quick Start Guide
-* Stop and Terminate Instances.
+* Idempotence for POD creation.
 * Generate output file
 * Update action for VPC, Subnets, Instances.
 * AWS Account information from boto config file.

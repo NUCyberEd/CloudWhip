@@ -9,3 +9,4 @@ build/
 *.egg-info/
 docs/
 tests/test1.py
+github_pages/
