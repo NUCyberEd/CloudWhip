@@ -1,0 +1,260 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Quick Start Guide &mdash; CloudWhip 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="static/default.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="static/jquery.js"></script>
+    <script type="text/javascript" src="static/underscore.js"></script>
+    <script type="text/javascript" src="static/doctools.js"></script>
+    <link rel="top" title="CloudWhip 1.0.0 documentation" href="index.html" />
+    <link rel="next" title="settings.cfg" href="settings_cfg_file.html" />
+    <link rel="prev" title="CloudWhip" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="settings_cfg_file.html" title="settings.cfg"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="CloudWhip"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">CloudWhip 1.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="quick-start-guide">
+<h1>Quick Start Guide<a class="headerlink" href="#quick-start-guide" title="Permalink to this headline">¶</a></h1>
+<p>Following is a quick start guide for you to use and explore CloudWhip tool for deploying labs on Amazon Cloud Services.</p>
+<div class="section" id="initial-setup">
+<h2>Initial Setup<a class="headerlink" href="#initial-setup" title="Permalink to this headline">¶</a></h2>
+<p>First things first, this guide assumes that you have an AWS account, if not please go ahead and create one <a class="reference external" href="https://portal.aws.amazon.com/gp/aws/developer/registration/index.html?nc1=h_ct">here</a> before we can move forward.</p>
+<p>As you might have realized by now <em>CloudWhip</em> is basically a wrapper for <a class="reference external" href="http://boto.readthedocs.org/en/latest/index.html">AWS Boto</a> library. Since CloudWhip uses Boto API calls to setup and manage, for you to start using CloudWhip, you need to provide your AWS Access Key ID and Secret Access Key in its configuration file. If you don&#8217;t have them already, please follow instruction on <a class="reference external" href="http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSGettingStartedGuide/AWSCredentials.html">AWS documentation</a> to either create one or access your existing keys.</p>
+<dl class="docutils">
+<dt>Now lets go grab CloudWhip project to our local machine. There are two ways you can do this:</dt>
+<dd><ul class="first last">
+<li><p class="first">Download the latest zip version of the project by clicking <a class="reference external" href="https://github.com/NUCyberEd/CloudWhip/archive/master.zip">here</a></p>
+</li>
+<li><p class="first">Clone the project from our GitHub Repository using the following command:</p>
+<div class="highlight-python"><div class="highlight"><pre>git clone https://github.com/NUCyberEd/CloudWhip.git
+</pre></div>
+</div>
+</li>
+</ul>
+</dd>
+</dl>
+<p>Run the <strong>setup.py</strong> file to install all the dependencies using the following command:</p>
+<div class="highlight-python"><div class="highlight"><pre>python setup.py install
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This might require <strong>sudo</strong> privileges if you are not running as a root user.</p>
+</div>
+<dl class="docutils">
+<dt>Once you have the CloudWhip project setup on your local machine, copy the <em>settings.cfg.template</em> file as <strong>settings.cfg</strong> and replace the following four fields:</dt>
+<dd><ul class="first last simple">
+<li>[YOUR_AWS_ACCESS_KEY_ID]</li>
+<li>[YOUR_AWS_SECRET_ACCESS_KEY]</li>
+<li>[REGION]</li>
+<li>[YOUR_KEY_PAIR_NAME]</li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><strong>[YOUR_KEY_PAIR_NAME]</strong> is not same as your AWS Access Key or Secret Key. This is the SSH Key pair you need to create on AWS Management Console to later give ssh access to the instances you might launch.</p>
+</div>
+<p>Here is a link for available <a class="reference external" href="http://docs.aws.amazon.com/general/latest/gr/rande.html">AWS regions</a> . For example, if you want to deploy your lab environment in US East then your region field would be <strong>us-east-1</strong>.</p>
+<p>You also need to create a configuration file for AWS-CLI, which is used in CloudWhip instead of Boto wherever necessary features are missing:</p>
+<div class="highlight-python"><div class="highlight"><pre>mkdir ~.aws &amp;&amp; cd ~.aws
+nano config
+</pre></div>
+</div>
+<p>Paste the following content to the file, save and close:</p>
+<div class="highlight-python"><div class="highlight"><pre>[default]
+aws_access_key_id=&lt;YOUR_AWS_ACCESS_KEY_ID&gt;
+aws_secret_access_key=&lt;YOUR_AWS_SECRET_ACCESS_KEY&gt;
+region=&lt;REGION&gt;
+</pre></div>
+</div>
+<p>If you have reached to this point without any issues and you updated the four fields mentioned above in the settings.cfg file, you should be able to continue with this tutorial. We will go into details of each field in the settings.cfg file in the next chapter. For now, lets just use the template provided and understand how to use CloudWhip.</p>
+</div>
+<div class="section" id="arguments">
+<h2>Arguments<a class="headerlink" href="#arguments" title="Permalink to this headline">¶</a></h2>
+<p>There are several arguments that you can pass according to what you would like to do with CloudWhip. To list all the available required and optional arguments, use the <strong>&#8211;help</strong> or <strong>-h</strong> switch as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre>python cloudWhip.py --help
+</pre></div>
+</div>
+<p>You should get the following as output:</p>
+<div class="highlight-python"><div class="highlight"><pre>usage: cloudWhip.py [-h] -c COMPONENT -a ACTION [-l LIST] [-s SETTING]
+                    [-d DRYRUN]
+
+%prog -c &lt;component&gt; -a &lt;action&gt; [options]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -c COMPONENT, --component COMPONENT
+                        Specifies one of the component from the config file.
+                        One of [&#39;VPC&#39;, &#39;POD&#39;]
+  -a ACTION, --action ACTION
+                        Specifies the action to be performed. One of
+                        [&#39;CREATE&#39;, &#39;UPDATE&#39;, &#39;DELETE&#39;]
+  -l LIST, --list LIST  Specifies the list of component names upon which the
+                        action is performed.Defaults to all entries found in
+                        the config file
+  -s SETTING, --setting SETTING
+                        Specifies the absolute path to the settings file
+  -d DRYRUN, --dryrun DRYRUN
+                        Specifies boolean value for dryrun flag. Default set
+                        to False
+</pre></div>
+</div>
+<p>The two required arguments here are <strong>&#8211;component</strong> and <strong>&#8211;action</strong>. The <strong>-a</strong> argument specifies what action you want to perform (<tt class="docutils literal"><span class="pre">create</span></tt>/ <tt class="docutils literal"><span class="pre">delete</span></tt>/ <tt class="docutils literal"><span class="pre">update</span></tt>) on the component specified with <strong>-c</strong> argument, which is either <tt class="docutils literal"><span class="pre">vpc</span></tt> or <tt class="docutils literal"><span class="pre">pod</span></tt>.</p>
+<p>Now let us use these arguments for following four main actions that you can perform with CloudWhip. The commands used in the following section refers to example from <strong>settings.cfg.template1</strong></p>
+</div>
+<div class="section" id="create-vpc-and-subnets-with-security-groups">
+<h2>1. Create VPC and Subnets with Security Groups<a class="headerlink" href="#create-vpc-and-subnets-with-security-groups" title="Permalink to this headline">¶</a></h2>
+<p>To create the vpc on AWS as defined in the settings.cfg file, use the following command:</p>
+<div class="highlight-python"><div class="highlight"><pre>python cloudWhip.py -c vpc -a create
+</pre></div>
+</div>
+<p>If you have defined two or more VPCs in your configuration file then you can specify the vpc name to be created using the <strong>-l</strong> switch as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre>python cloudWhip.py -c vpc -a create -l vpc_test
+</pre></div>
+</div>
+</div>
+<div class="section" id="create-pods">
+<h2>2. Create PODs<a class="headerlink" href="#create-pods" title="Permalink to this headline">¶</a></h2>
+<p>To create the Point of Delivery(POD), use similar command as used while creating the VPC but the component parameter here will be <tt class="docutils literal"><span class="pre">pod</span></tt> instead:</p>
+<div class="highlight-python"><div class="highlight"><pre>python cloudWhip.py -c pod -a create
+</pre></div>
+</div>
+<p>Again, you can use the <strong>-l</strong> switch to specify the PODs to be created:</p>
+<div class="highlight-python"><div class="highlight"><pre>python cloudWhip.py -c pod -a create -l student, dmz
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <strong>-l</strong> switch parameter is a comma separated list of component names. If the <strong>-l</strong> is not used, by default all the components in the configuration file is considered.</p>
+</div>
+</div>
+<div class="section" id="delete-pods">
+<h2>3. Delete PODs<a class="headerlink" href="#delete-pods" title="Permalink to this headline">¶</a></h2>
+<p>To delete all the POD components use the <strong>delete</strong> action parameter as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre>python cloudWhip.py -c pod -a delete
+</pre></div>
+</div>
+<p>You can use the <strong>-l</strong> switch with the delete action as well. Say for example you want to delete only the dmz POD, then the command will be as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre>python cloudWhip.py -c pod -a delete -l dmz
+</pre></div>
+</div>
+</div>
+<div class="section" id="delete-vpc-and-subnets">
+<h2>4. Delete VPC and Subnets<a class="headerlink" href="#delete-vpc-and-subnets" title="Permalink to this headline">¶</a></h2>
+<p>Deleting the VPC is similar. Note that deleting the VPC will delete all the components associated with the VPC first such as subnets, security groups, route tables and the VPC itself at the end:</p>
+<div class="highlight-python"><div class="highlight"><pre>python cloudWhip.py -c vpc -a delete
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You have to delete the PODs associated with the VPC first. Otherwise CloudWhip will issue a warning message and exit without any action performed.</p>
+</div>
+<p>While creating any of these components you might come across run-time issues or errors. Please refer to the <a class="reference internal" href="known_issues.html#known-issues"><em>Known Issues</em></a> page first before contacting the author directly.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Quick Start Guide</a><ul>
+<li><a class="reference internal" href="#initial-setup">Initial Setup</a></li>
+<li><a class="reference internal" href="#arguments">Arguments</a></li>
+<li><a class="reference internal" href="#create-vpc-and-subnets-with-security-groups">1. Create VPC and Subnets with Security Groups</a></li>
+<li><a class="reference internal" href="#create-pods">2. Create PODs</a></li>
+<li><a class="reference internal" href="#delete-pods">3. Delete PODs</a></li>
+<li><a class="reference internal" href="#delete-vpc-and-subnets">4. Delete VPC and Subnets</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">CloudWhip</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="settings_cfg_file.html"
+                        title="next chapter">settings.cfg</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="sources/quick_start_guide.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="settings_cfg_file.html" title="settings.cfg"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="CloudWhip"
+             >previous</a> |</li>
+        <li><a href="index.html">CloudWhip 1.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, NUCyberEd.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

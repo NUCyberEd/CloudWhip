@@ -1,0 +1,186 @@
+.. _settings_cfg:
+
+###########################
+settings.cfg
+###########################
+
+In this chapter, we will go through all the settings available in CloudWhip and ways to use these settings for various configurations as per your lab environment requirements.
+
+*********************
+Structure and Format
+*********************
+
+The configuration file **settings.cfg** is structured into three main sections:
+
+- Account Section 
+- VPC Section
+- POD Section 
+
+`YAML <http://www.yaml.org/>`_ - ``(YAML Ain't Markup Language)`` is used as data serialization standard in the configuration file. In our case, we make use of `pyyaml <http://pyyaml.org/>`_ which is a python binding for YAML. This library should be installed when you run the ``setup.py install`` command while setting up the CloudWhip project on your local machine.  
+
+Basically the layout for ``pyymal`` is similar to python language with indentation ``(Tab)`` representing the nested layers, semicolon ``(:)`` are used to separate variable name(Key) and value pairs, and hyphen ``(-)`` is used for nesting block mapping. 
+
+If you need detailed information for pyymal format with examples, please visit there `official documentation <http://pyyaml.org/wiki/PyYAMLDocumentation>`_ page. 
+
+*********************
+Account Section
+*********************
+
+Account section gives the general information about your AWS account for CloudWhip to use the Boto API calls internally.
+
+connect_to_region
+####################
+
+This field tells CloudWhip where to deploy your lab environment. AWS offers you several `regions <http://docs.aws.amazon.com/general/latest/gr/rande.html>`_ to deploy your instances, you can choose them close to your Geolocation or as per your requirements. For example, your field value will be ``us-east-1`` if like your lab to be deployed in US East (Northern Virginia) Region.
+
+.. warning::
+	
+	All the AWS regions are isolated, which means you can not create a resource such as a security group in one region and try to access it from an other region.
+
+
+aws_access_key_id
+########################
+
+This field is for your AWS Access Key. Your key will look something like this ``AKIAIOSFODNN7EXAMPLE``.
+
+
+aws_secret_access_key
+########################
+
+This is your AWS Secret Key. If you prefer to use IAM access keys instead of AWS root account access keys for security purposes, please follow instructions from AWS `Getting Started Guide <http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSGettingStartedGuide/AWSCredentials.html>`_
+
+.. note::
+	
+	All the above fields are required for CloudWhip to work.
+
+*********************
+VPC Section
+*********************
+
+This section contains all the information to create or delete your VPC, subnet and security groups.
+
+name
+#########
+
+The name field in most of the sections is used for the creating name tags  and to later referred to associate other components. For example, if you decide to name your VPC as ``vpc_test`` as in the template, you can refer to this name tag in ``associate_vpc`` field from the :ref:`security_groups_sec` section.
+
+cidr_block
+############
+
+This required field is for your VPC cidr block.
+
+subnet_settings
+#################
+
+This section contains information about your subnets within the VPC you just created.
+
+subnet_group_name
+********************
+
+Give a name to your subnet group. 
+
+count
+***********
+
+Mention the number (integer value) of subnets you want to create withing VPC you created.
+
+subnet_cidr_block 
+******************
+
+This filed specifies the cidr blocks for the subnets. You can create multiple subnets in single request within the VPC by using a range of valid cidr blocks as shown in ``settings.cfg.template1``. 
+
+.. note::
+
+	Your subnet ``count`` and ``subnet_cidr_block`` range if any should always match. For example, if you specify the subnet count value as 10 and your VPC cidr block is 192.168.1.1/20, then your ``subnet_cidr_block`` value can be 192.168.1-10.1/24, 192.168.5-15.1/24 etc., but CloudWhip will issue an error if it is something like 192.168.1-5.1/24 since the range is only 5 but the count was set to 10.
+
+route_table
+****************
+
+This field specifies the route table rules associated with the subnet. For more details about route tables in AWS, please go through AWS User Guide on `Route Tables <http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html>`_. ``route_table`` field value is a list of python dictionary with ``Destination`` and ``Target`` as its key. The values for both the Keys will be list of route paths. 
+
+If you want to give Internet access to the subnet in your VPC then the Destination route would be 0.0.0.0/0, which means world and you live the corresponding Target entry as blank, since by default CloudWhip considers a blank Target entry as the internet gateway associated with the VPC. This is illustrated in template1. 
+
+.. note::
+
+	The route_table entries are in pairs. In other words the first entry in Destination list and the first entry in the Target list corresponds to one row in the actual route table. 
+
+	So if you want a route table as illustrated below:
+
+	+--------+-------------------+------------------+
+	| Serial | Destination       | Target           |
+	+========+===================+==================+
+	| 1      | 0.0.0.0/0         | 10.2.10.1/24     |
+	+--------+-------------------+------------------+
+	| 2      | 10.1.10.1/24      | internet-gateway |
+	+--------+-------------------+------------------+
+	| 3      | 10.3.10.1/24      | 10.2.10.1/24     |
+	+--------+-------------------+------------------+
+
+	Your route_table entry would be ``{Destination: [0.0.0.0/0, 10.1.10.1/24, 10.3.10.1/24], Target: [10.2.10.1/24, , 10.2.10.1/24]}``
+	
+	Notice how the second Target entry is left blank for VPCs internet-gateway.
+
+.. _security_groups_sec:
+
+security_groups
+###################
+
+sg_name
+****************
+
+description
+****************
+
+associate_vpc
+****************
+
+rules
+****************
+
+*********************
+POD Section
+*********************
+
+name
+#################
+
+count 
+#################
+
+associate_subnet_group_name
+##############################
+
+instance_settings
+##################
+
+inst_name
+****************
+
+ami_id
+****************
+
+associate_sg
+****************
+
+public_ip 
+****************
+
+bool
+
+private_ip
+****************
+
+Wildcard bits
+
+key_name
+****************
+
+**********************
+Examples
+**********************
+
+Many PODs in one subnet
+########################
+
+One POD / Subnet
+##################

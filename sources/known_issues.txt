@@ -1,0 +1,15 @@
+.. _known_issues:
+
+Known Issues
+===================
+
+1. ``400 Bad Request`` while creation
+--------------------------------------
+
+While creating either a VPC or a POD, the program might issue a ``400 Bad Request`` error as shown below::
+
+	oto.exception.EC2ResponseError: EC2ResponseError: 400 Bad Request
+	<?xml version="1.0" encoding="UTF-8"?>
+	<Response><Errors><Error><Code>InvalidVpcID.NotFound</Code><Message>The vpc ID 'vpc-xxxx' does not exist</Message></Error></Errors><RequestID>xxxx-xxxx</RequestID></Response>
+
+This happens when the AWS is still processing your previous request or if there is a delay between requests. In such a case, please wait for a minute or two for AWS server to sync and then try the same command again. Do not worry about duplicate creations, CloudWhip is mostly Idempotent. 

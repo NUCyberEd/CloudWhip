@@ -1,0 +1,138 @@
+Quick Start Guide
+=================
+
+Following is a quick start guide for you to use and explore CloudWhip tool for deploying labs on Amazon Cloud Services.
+
+Initial Setup
+---------------
+
+First things first, this guide assumes that you have an AWS account, if not please go ahead and create one `here <https://portal.aws.amazon.com/gp/aws/developer/registration/index.html?nc1=h_ct>`_ before we can move forward.
+
+As you might have realized by now *CloudWhip* is basically a wrapper for `AWS Boto <http://boto.readthedocs.org/en/latest/index.html>`_ library. Since CloudWhip uses Boto API calls to setup and manage, for you to start using CloudWhip, you need to provide your AWS Access Key ID and Secret Access Key in its configuration file. If you don't have them already, please follow instruction on `AWS documentation <http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSGettingStartedGuide/AWSCredentials.html>`_ to either create one or access your existing keys.
+
+Now lets go grab CloudWhip project to our local machine. There are two ways you can do this:
+ 	- Download the latest zip version of the project by clicking `here <https://github.com/NUCyberEd/CloudWhip/archive/master.zip>`_
+ 	- Clone the project from our GitHub Repository using the following command::
+
+ 		git clone https://github.com/NUCyberEd/CloudWhip.git
+
+Run the **setup.py** file to install all the dependencies using the following command::
+	
+	python setup.py install
+
+.. note::
+	
+	This might require **sudo** privileges if you are not running as a root user. 
+
+Once you have the CloudWhip project setup on your local machine, copy the *settings.cfg.template* file as **settings.cfg** and replace the following four fields:
+	- [YOUR_AWS_ACCESS_KEY_ID]
+	- [YOUR_AWS_SECRET_ACCESS_KEY]
+	- [REGION]
+	- [YOUR_KEY_PAIR_NAME]
+
+.. note::
+
+	**[YOUR_KEY_PAIR_NAME]** is not same as your AWS Access Key or Secret Key. This is the SSH Key pair you need to create on AWS Management Console to later give ssh access to the instances you might launch.
+
+Here is a link for available `AWS regions <http://docs.aws.amazon.com/general/latest/gr/rande.html>`_ . For example, if you want to deploy your lab environment in US East then your region field would be **us-east-1**.
+
+You also need to create a configuration file for AWS-CLI, which is used in CloudWhip instead of Boto wherever necessary features are missing::
+	
+	mkdir ~.aws && cd ~.aws
+	nano config
+
+Paste the following content to the file, save and close::
+	
+	[default]
+	aws_access_key_id=<YOUR_AWS_ACCESS_KEY_ID>
+	aws_secret_access_key=<YOUR_AWS_SECRET_ACCESS_KEY>
+	region=<REGION>
+
+
+If you have reached to this point without any issues and you updated the four fields mentioned above in the settings.cfg file, you should be able to continue with this tutorial. We will go into details of each field in the settings.cfg file in the next chapter. For now, lets just use the template provided and understand how to use CloudWhip.
+
+Arguments
+----------
+
+There are several arguments that you can pass according to what you would like to do with CloudWhip. To list all the available required and optional arguments, use the **--help** or **-h** switch as follows::
+	
+	python cloudWhip.py --help
+
+You should get the following as output::
+
+	usage: cloudWhip.py [-h] -c COMPONENT -a ACTION [-l LIST] [-s SETTING]
+	                    [-d DRYRUN]
+
+	%prog -c <component> -a <action> [options]
+
+	optional arguments:
+	  -h, --help            show this help message and exit
+	  -c COMPONENT, --component COMPONENT
+	                        Specifies one of the component from the config file.
+	                        One of ['VPC', 'POD']
+	  -a ACTION, --action ACTION
+	                        Specifies the action to be performed. One of
+	                        ['CREATE', 'UPDATE', 'DELETE']
+	  -l LIST, --list LIST  Specifies the list of component names upon which the
+	                        action is performed.Defaults to all entries found in
+	                        the config file
+	  -s SETTING, --setting SETTING
+	                        Specifies the absolute path to the settings file
+	  -d DRYRUN, --dryrun DRYRUN
+	                        Specifies boolean value for dryrun flag. Default set
+	                        to False
+
+The two required arguments here are **--component** and **--action**. The **-a** argument specifies what action you want to perform (``create``/ ``delete``/ ``update``) on the component specified with **-c** argument, which is either ``vpc`` or ``pod``.
+
+Now let us use these arguments for following four main actions that you can perform with CloudWhip. The commands used in the following section refers to example from **settings.cfg.template1**
+
+1. Create VPC and Subnets with Security Groups
+-----------------------------------------------
+
+To create the vpc on AWS as defined in the settings.cfg file, use the following command::
+	
+	python cloudWhip.py -c vpc -a create
+
+If you have defined two or more VPCs in your configuration file then you can specify the vpc name to be created using the **-l** switch as follows::
+
+	python cloudWhip.py -c vpc -a create -l vpc_test
+
+2. Create PODs
+---------------
+
+To create the Point of Delivery(POD), use similar command as used while creating the VPC but the component parameter here will be ``pod`` instead::
+
+	python cloudWhip.py -c pod -a create
+	
+Again, you can use the **-l** switch to specify the PODs to be created::
+
+	python cloudWhip.py -c pod -a create -l student, dmz
+
+.. note::
+	
+	The **-l** switch parameter is a comma separated list of component names. If the **-l** is not used, by default all the components in the configuration file is considered.
+
+
+3. Delete PODs
+----------------
+
+To delete all the POD components use the **delete** action parameter as follows::
+
+	python cloudWhip.py -c pod -a delete
+
+You can use the **-l** switch with the delete action as well. Say for example you want to delete only the dmz POD, then the command will be as follows::
+
+	python cloudWhip.py -c pod -a delete -l dmz
+
+4. Delete VPC and Subnets
+---------------------------
+
+Deleting the VPC is similar. Note that deleting the VPC will delete all the components associated with the VPC first such as subnets, security groups, route tables and the VPC itself at the end::
+
+	python cloudWhip.py -c vpc -a delete 
+
+.. note:: 
+	
+	You have to delete the PODs associated with the VPC first. Otherwise CloudWhip will issue a warning message and exit without any action performed.
+
+While creating any of these components you might come across run-time issues or errors. Please refer to the :ref:`known_issues` page first before contacting the author directly.

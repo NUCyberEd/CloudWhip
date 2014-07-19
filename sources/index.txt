@@ -1,0 +1,79 @@
+.. CloudWhip documentation master file, created by
+   sphinx-quickstart on Fri May  9 18:49:26 2014.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+.. toctree::
+   :hidden:
+
+   quick_start_guide
+   settings_cfg_file
+   known_issues
+
+CloudWhip
+==========
+
+CloudWhip is a provisioning tool to conduct Cyber security labs on Amazon Cloud Services. Using CloudWhip course instructors can easily deploy and manage lab environments using a single configuration file.
+
+Setup
+-------------
+
+Just run the following command::
+
+	python setup.py install
+
+Copy the **setting.cfg.template** as **setting.cfg** and update your AWS account information. Fill the respective VPC and POD component fields according to your lab requirements.
+
+Requires
+-------------
+* boto
+* awscli
+* nose
+* ipaddress
+* pyyaml
+
+Usage
+-------------
+
+Runt the following command::
+
+	python cloudWhip.py -c <component> -a <action> [options]
+
+Available Features
+-----------------------
+* Create VPC, Subnets, PODs
+* Delete VPC, Subnets, PODs
+
+Try help command to list all available arguments::
+
+	python cloudWhip.py -h
+
+**Output**::
+
+	usage: cloudWhip.py [-h] -c COMPONENT -a ACTION [-l LIST] [-s SETTING]
+	                    [-d DRYRUN]
+
+	%prog -c <component> -a <action> [options]
+
+	optional arguments:
+	  -h, --help            show this help message and exit
+	  -c COMPONENT, --component COMPONENT
+	                        Specifies one of the component from the config file.
+	                        One of ['VPC', 'POD']
+	  -a ACTION, --action ACTION
+	                        Specifies the action to be performed. One of
+	                        ['CREATE', 'UPDATE', 'DELETE']
+	  -l LIST, --list LIST  Specifies the list of component names upon which the
+	                        action is performed.Defaults to all entries found in
+	                        the config file
+	  -s SETTING, --setting SETTING
+	                        Specifies the absolute path to the settings file
+	  -d DRYRUN, --dryrun DRYRUN
+	                        Specifies boolean value for dryrun flag. Default set
+	                        to False
+
+TODO List
+-------------
+* Quick Start Guide
+* Update action for VPC, Subnets, PODs.
+* AWS Account information from boto config file.

@@ -1,0 +1,330 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>settings.cfg &mdash; CloudWhip 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="static/default.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="static/jquery.js"></script>
+    <script type="text/javascript" src="static/underscore.js"></script>
+    <script type="text/javascript" src="static/doctools.js"></script>
+    <link rel="top" title="CloudWhip 1.0.0 documentation" href="index.html" />
+    <link rel="next" title="Known Issues" href="known_issues.html" />
+    <link rel="prev" title="Quick Start Guide" href="quick_start_guide.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="known_issues.html" title="Known Issues"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="quick_start_guide.html" title="Quick Start Guide"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">CloudWhip 1.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="settings-cfg">
+<span id="id1"></span><h1>settings.cfg<a class="headerlink" href="#settings-cfg" title="Permalink to this headline">¶</a></h1>
+<p>In this chapter, we will go through all the settings available in CloudWhip and ways to use these settings for various configurations as per your lab environment requirements.</p>
+<div class="section" id="structure-and-format">
+<h2>Structure and Format<a class="headerlink" href="#structure-and-format" title="Permalink to this headline">¶</a></h2>
+<p>The configuration file <strong>settings.cfg</strong> is structured into three main sections:</p>
+<ul class="simple">
+<li>Account Section</li>
+<li>VPC Section</li>
+<li>POD Section</li>
+</ul>
+<p><a class="reference external" href="http://www.yaml.org/">YAML</a> - <tt class="docutils literal"><span class="pre">(YAML</span> <span class="pre">Ain't</span> <span class="pre">Markup</span> <span class="pre">Language)</span></tt> is used as data serialization standard in the configuration file. In our case, we make use of <a class="reference external" href="http://pyyaml.org/">pyyaml</a> which is a python binding for YAML. This library should be installed when you run the <tt class="docutils literal"><span class="pre">setup.py</span> <span class="pre">install</span></tt> command while setting up the CloudWhip project on your local machine.</p>
+<p>Basically the layout for <tt class="docutils literal"><span class="pre">pyymal</span></tt> is similar to python language with indentation <tt class="docutils literal"><span class="pre">(Tab)</span></tt> representing the nested layers, semicolon <tt class="docutils literal"><span class="pre">(:)</span></tt> are used to separate variable name(Key) and value pairs, and hyphen <tt class="docutils literal"><span class="pre">(-)</span></tt> is used for nesting block mapping.</p>
+<p>If you need detailed information for pyymal format with examples, please visit there <a class="reference external" href="http://pyyaml.org/wiki/PyYAMLDocumentation">official documentation</a> page.</p>
+</div>
+<div class="section" id="account-section">
+<h2>Account Section<a class="headerlink" href="#account-section" title="Permalink to this headline">¶</a></h2>
+<p>Account section gives the general information about your AWS account for CloudWhip to use the Boto API calls internally.</p>
+<div class="section" id="connect-to-region">
+<h3>connect_to_region<a class="headerlink" href="#connect-to-region" title="Permalink to this headline">¶</a></h3>
+<p>This field tells CloudWhip where to deploy your lab environment. AWS offers you several <a class="reference external" href="http://docs.aws.amazon.com/general/latest/gr/rande.html">regions</a> to deploy your instances, you can choose them close to your Geolocation or as per your requirements. For example, your field value will be <tt class="docutils literal"><span class="pre">us-east-1</span></tt> if like your lab to be deployed in US East (Northern Virginia) Region.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">All the AWS regions are isolated, which means you can not create a resource such as a security group in one region and try to access it from an other region.</p>
+</div>
+</div>
+<div class="section" id="aws-access-key-id">
+<h3>aws_access_key_id<a class="headerlink" href="#aws-access-key-id" title="Permalink to this headline">¶</a></h3>
+<p>This field is for your AWS Access Key. Your key will look something like this <tt class="docutils literal"><span class="pre">AKIAIOSFODNN7EXAMPLE</span></tt>.</p>
+</div>
+<div class="section" id="aws-secret-access-key">
+<h3>aws_secret_access_key<a class="headerlink" href="#aws-secret-access-key" title="Permalink to this headline">¶</a></h3>
+<p>This is your AWS Secret Key. If you prefer to use IAM access keys instead of AWS root account access keys for security purposes, please follow instructions from AWS <a class="reference external" href="http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSGettingStartedGuide/AWSCredentials.html">Getting Started Guide</a></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">All the above fields are required for CloudWhip to work.</p>
+</div>
+</div>
+</div>
+<div class="section" id="vpc-section">
+<h2>VPC Section<a class="headerlink" href="#vpc-section" title="Permalink to this headline">¶</a></h2>
+<p>This section contains all the information to create or delete your VPC, subnet and security groups.</p>
+<div class="section" id="name">
+<h3>name<a class="headerlink" href="#name" title="Permalink to this headline">¶</a></h3>
+<p>The name field in most of the sections is used for the creating name tags  and to later referred to associate other components. For example, if you decide to name your VPC as <tt class="docutils literal"><span class="pre">vpc_test</span></tt> as in the template, you can refer to this name tag in <tt class="docutils literal"><span class="pre">associate_vpc</span></tt> field from the <a class="reference internal" href="#security-groups-sec"><em>security_groups</em></a> section.</p>
+</div>
+<div class="section" id="cidr-block">
+<h3>cidr_block<a class="headerlink" href="#cidr-block" title="Permalink to this headline">¶</a></h3>
+<p>This required field is for your VPC cidr block.</p>
+</div>
+<div class="section" id="subnet-settings">
+<h3>subnet_settings<a class="headerlink" href="#subnet-settings" title="Permalink to this headline">¶</a></h3>
+<p>This section contains information about your subnets within the VPC you just created.</p>
+<div class="section" id="subnet-group-name">
+<h4>subnet_group_name<a class="headerlink" href="#subnet-group-name" title="Permalink to this headline">¶</a></h4>
+<p>Give a name to your subnet group.</p>
+</div>
+<div class="section" id="count">
+<h4>count<a class="headerlink" href="#count" title="Permalink to this headline">¶</a></h4>
+<p>Mention the number (integer value) of subnets you want to create withing VPC you created.</p>
+</div>
+<div class="section" id="subnet-cidr-block">
+<h4>subnet_cidr_block<a class="headerlink" href="#subnet-cidr-block" title="Permalink to this headline">¶</a></h4>
+<p>This filed specifies the cidr blocks for the subnets. You can create multiple subnets in single request within the VPC by using a range of valid cidr blocks as shown in <tt class="docutils literal"><span class="pre">settings.cfg.template1</span></tt>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Your subnet <tt class="docutils literal"><span class="pre">count</span></tt> and <tt class="docutils literal"><span class="pre">subnet_cidr_block</span></tt> range if any should always match. For example, if you specify the subnet count value as 10 and your VPC cidr block is 192.168.1.1/20, then your <tt class="docutils literal"><span class="pre">subnet_cidr_block</span></tt> value can be 192.168.1-10.1/24, 192.168.5-15.1/24 etc., but CloudWhip will issue an error if it is something like 192.168.1-5.1/24 since the range is only 5 but the count was set to 10.</p>
+</div>
+</div>
+<div class="section" id="route-table">
+<h4>route_table<a class="headerlink" href="#route-table" title="Permalink to this headline">¶</a></h4>
+<p>This field specifies the route table rules associated with the subnet. For more details about route tables in AWS, please go through AWS User Guide on <a class="reference external" href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html">Route Tables</a>. <tt class="docutils literal"><span class="pre">route_table</span></tt> field value is a list of python dictionary with <tt class="docutils literal"><span class="pre">Destination</span></tt> and <tt class="docutils literal"><span class="pre">Target</span></tt> as its key. The values for both the Keys will be list of route paths.</p>
+<p>If you want to give Internet access to the subnet in your VPC then the Destination route would be 0.0.0.0/0, which means world and you live the corresponding Target entry as blank, since by default CloudWhip considers a blank Target entry as the internet gateway associated with the VPC. This is illustrated in template1.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>The route_table entries are in pairs. In other words the first entry in Destination list and the first entry in the Target list corresponds to one row in the actual route table.</p>
+<p>So if you want a route table as illustrated below:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="18%" />
+<col width="42%" />
+<col width="40%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Serial</th>
+<th class="head">Destination</th>
+<th class="head">Target</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>1</td>
+<td>0.0.0.0/0</td>
+<td>10.2.10.1/24</td>
+</tr>
+<tr class="row-odd"><td>2</td>
+<td>10.1.10.1/24</td>
+<td>internet-gateway</td>
+</tr>
+<tr class="row-even"><td>3</td>
+<td>10.3.10.1/24</td>
+<td>10.2.10.1/24</td>
+</tr>
+</tbody>
+</table>
+<p>Your route_table entry would be <tt class="docutils literal"><span class="pre">{Destination:</span> <span class="pre">[0.0.0.0/0,</span> <span class="pre">10.1.10.1/24,</span> <span class="pre">10.3.10.1/24],</span> <span class="pre">Target:</span> <span class="pre">[10.2.10.1/24,</span> <span class="pre">,</span> <span class="pre">10.2.10.1/24]}</span></tt></p>
+<p class="last">Notice how the second Target entry is left blank for VPCs internet-gateway.</p>
+</div>
+</div>
+</div>
+<div class="section" id="security-groups">
+<span id="security-groups-sec"></span><h3>security_groups<a class="headerlink" href="#security-groups" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="sg-name">
+<h4>sg_name<a class="headerlink" href="#sg-name" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="description">
+<h4>description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="associate-vpc">
+<h4>associate_vpc<a class="headerlink" href="#associate-vpc" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="rules">
+<h4>rules<a class="headerlink" href="#rules" title="Permalink to this headline">¶</a></h4>
+</div>
+</div>
+</div>
+<div class="section" id="pod-section">
+<h2>POD Section<a class="headerlink" href="#pod-section" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id2">
+<h3>name<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="id3">
+<h3>count<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="associate-subnet-group-name">
+<h3>associate_subnet_group_name<a class="headerlink" href="#associate-subnet-group-name" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="instance-settings">
+<h3>instance_settings<a class="headerlink" href="#instance-settings" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="inst-name">
+<h4>inst_name<a class="headerlink" href="#inst-name" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="ami-id">
+<h4>ami_id<a class="headerlink" href="#ami-id" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="associate-sg">
+<h4>associate_sg<a class="headerlink" href="#associate-sg" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="public-ip">
+<h4>public_ip<a class="headerlink" href="#public-ip" title="Permalink to this headline">¶</a></h4>
+<p>bool</p>
+</div>
+<div class="section" id="private-ip">
+<h4>private_ip<a class="headerlink" href="#private-ip" title="Permalink to this headline">¶</a></h4>
+<p>Wildcard bits</p>
+</div>
+<div class="section" id="key-name">
+<h4>key_name<a class="headerlink" href="#key-name" title="Permalink to this headline">¶</a></h4>
+</div>
+</div>
+</div>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="many-pods-in-one-subnet">
+<h3>Many PODs in one subnet<a class="headerlink" href="#many-pods-in-one-subnet" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="one-pod-subnet">
+<h3>One POD / Subnet<a class="headerlink" href="#one-pod-subnet" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">settings.cfg</a><ul>
+<li><a class="reference internal" href="#structure-and-format">Structure and Format</a></li>
+<li><a class="reference internal" href="#account-section">Account Section</a><ul>
+<li><a class="reference internal" href="#connect-to-region">connect_to_region</a></li>
+<li><a class="reference internal" href="#aws-access-key-id">aws_access_key_id</a></li>
+<li><a class="reference internal" href="#aws-secret-access-key">aws_secret_access_key</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#vpc-section">VPC Section</a><ul>
+<li><a class="reference internal" href="#name">name</a></li>
+<li><a class="reference internal" href="#cidr-block">cidr_block</a></li>
+<li><a class="reference internal" href="#subnet-settings">subnet_settings</a><ul>
+<li><a class="reference internal" href="#subnet-group-name">subnet_group_name</a></li>
+<li><a class="reference internal" href="#count">count</a></li>
+<li><a class="reference internal" href="#subnet-cidr-block">subnet_cidr_block</a></li>
+<li><a class="reference internal" href="#route-table">route_table</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#security-groups">security_groups</a><ul>
+<li><a class="reference internal" href="#sg-name">sg_name</a></li>
+<li><a class="reference internal" href="#description">description</a></li>
+<li><a class="reference internal" href="#associate-vpc">associate_vpc</a></li>
+<li><a class="reference internal" href="#rules">rules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pod-section">POD Section</a><ul>
+<li><a class="reference internal" href="#id2">name</a></li>
+<li><a class="reference internal" href="#id3">count</a></li>
+<li><a class="reference internal" href="#associate-subnet-group-name">associate_subnet_group_name</a></li>
+<li><a class="reference internal" href="#instance-settings">instance_settings</a><ul>
+<li><a class="reference internal" href="#inst-name">inst_name</a></li>
+<li><a class="reference internal" href="#ami-id">ami_id</a></li>
+<li><a class="reference internal" href="#associate-sg">associate_sg</a></li>
+<li><a class="reference internal" href="#public-ip">public_ip</a></li>
+<li><a class="reference internal" href="#private-ip">private_ip</a></li>
+<li><a class="reference internal" href="#key-name">key_name</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#many-pods-in-one-subnet">Many PODs in one subnet</a></li>
+<li><a class="reference internal" href="#one-pod-subnet">One POD / Subnet</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="quick_start_guide.html"
+                        title="previous chapter">Quick Start Guide</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="known_issues.html"
+                        title="next chapter">Known Issues</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="sources/settings_cfg_file.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="known_issues.html" title="Known Issues"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="quick_start_guide.html" title="Quick Start Guide"
+             >previous</a> |</li>
+        <li><a href="index.html">CloudWhip 1.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, NUCyberEd.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>
