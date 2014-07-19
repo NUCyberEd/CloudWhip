@@ -74,6 +74,7 @@ Try help command to list all available arguments::
 
 TODO List
 -------------
-* Quick Start Guide
-* Update action for VPC, Subnets, PODs.
+* Idempotence for POD creation.
+* Generate output file
+* Update action for VPC, Subnets, Instances.
 * AWS Account information from boto config file.

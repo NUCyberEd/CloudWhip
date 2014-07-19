@@ -92,7 +92,7 @@
 <h2>VPC Section<a class="headerlink" href="#vpc-section" title="Permalink to this headline">¶</a></h2>
 <p>This section contains all the information to create or delete your VPC, subnet and security groups.</p>
 <div class="section" id="name">
-<h3>name<a class="headerlink" href="#name" title="Permalink to this headline">¶</a></h3>
+<span id="vpc-name-sec"></span><h3>name<a class="headerlink" href="#name" title="Permalink to this headline">¶</a></h3>
 <p>The name field in most of the sections is used for the creating name tags  and to later referred to associate other components. For example, if you decide to name your VPC as <tt class="docutils literal"><span class="pre">vpc_test</span></tt> as in the template, you can refer to this name tag in <tt class="docutils literal"><span class="pre">associate_vpc</span></tt> field from the <a class="reference internal" href="#security-groups-sec"><em>security_groups</em></a> section.</p>
 </div>
 <div class="section" id="cidr-block">
@@ -103,8 +103,8 @@
 <h3>subnet_settings<a class="headerlink" href="#subnet-settings" title="Permalink to this headline">¶</a></h3>
 <p>This section contains information about your subnets within the VPC you just created.</p>
 <div class="section" id="subnet-group-name">
-<h4>subnet_group_name<a class="headerlink" href="#subnet-group-name" title="Permalink to this headline">¶</a></h4>
-<p>Give a name to your subnet group.</p>
+<span id="subnet-group-name-sec"></span><h4>subnet_group_name<a class="headerlink" href="#subnet-group-name" title="Permalink to this headline">¶</a></h4>
+<p>This field takes a string value for your subnet group <tt class="docutils literal"><span class="pre">Name</span></tt> tag.</p>
 </div>
 <div class="section" id="count">
 <h4>count<a class="headerlink" href="#count" title="Permalink to this headline">¶</a></h4>
@@ -112,7 +112,7 @@
 </div>
 <div class="section" id="subnet-cidr-block">
 <h4>subnet_cidr_block<a class="headerlink" href="#subnet-cidr-block" title="Permalink to this headline">¶</a></h4>
-<p>This filed specifies the cidr blocks for the subnets. You can create multiple subnets in single request within the VPC by using a range of valid cidr blocks as shown in <tt class="docutils literal"><span class="pre">settings.cfg.template1</span></tt>.</p>
+<p>This field specifies the cidr blocks for the subnets. You can create multiple subnets in single request within the VPC by using a range of valid cidr blocks as shown in <tt class="docutils literal"><span class="pre">settings.cfg.template1</span></tt>.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Your subnet <tt class="docutils literal"><span class="pre">count</span></tt> and <tt class="docutils literal"><span class="pre">subnet_cidr_block</span></tt> range if any should always match. For example, if you specify the subnet count value as 10 and your VPC cidr block is 192.168.1.1/20, then your <tt class="docutils literal"><span class="pre">subnet_cidr_block</span></tt> value can be 192.168.1-10.1/24, 192.168.5-15.1/24 etc., but CloudWhip will issue an error if it is something like 192.168.1-5.1/24 since the range is only 5 but the count was set to 10.</p>
@@ -160,52 +160,83 @@
 </div>
 <div class="section" id="security-groups">
 <span id="security-groups-sec"></span><h3>security_groups<a class="headerlink" href="#security-groups" title="Permalink to this headline">¶</a></h3>
+<p>This section contains information about your security groups that you want to associate with your VPC. Please visit AWS User Guide on <a class="reference external" href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html">Security Group</a> for more details on Amazon EC2 Security Groups.</p>
 <div class="section" id="sg-name">
 <h4>sg_name<a class="headerlink" href="#sg-name" title="Permalink to this headline">¶</a></h4>
+<p>This field takes a string value for your security group <tt class="docutils literal"><span class="pre">Name</span></tt> tag.</p>
 </div>
 <div class="section" id="description">
 <h4>description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h4>
+<p>A description for your security group.</p>
 </div>
 <div class="section" id="associate-vpc">
 <h4>associate_vpc<a class="headerlink" href="#associate-vpc" title="Permalink to this headline">¶</a></h4>
+<p>Mention the VPC&#8217;s <a class="reference internal" href="#vpc-name-sec"><em>name</em></a> value here to associate your security group with that particular VPC.</p>
 </div>
 <div class="section" id="rules">
 <h4>rules<a class="headerlink" href="#rules" title="Permalink to this headline">¶</a></h4>
+<p>This is a nested python list of security group rules. A single rule structure is as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">rules</span> <span class="o">=</span> <span class="p">[[</span><span class="s">&quot;ip_protocol&quot;</span><span class="p">,</span> <span class="s">&quot;from_port&quot;</span><span class="p">,</span> <span class="s">&quot;to_port&quot;</span><span class="p">,</span> <span class="s">&quot;cidr_ip&quot;</span><span class="p">,</span> <span class="s">&quot;sg_grp_name&quot;</span><span class="p">]]</span>
+</pre></div>
+</div>
+<p>Here <tt class="docutils literal"><span class="pre">sg_grp_name</span></tt> refers to an existing security group name.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">You can not use <tt class="docutils literal"><span class="pre">cidr_ip</span></tt> or <tt class="docutils literal"><span class="pre">sg_grp_name</span></tt> field together as in <strong>settings.cfg.template1</strong>, where the <tt class="docutils literal"><span class="pre">sg_grp_name</span></tt> is set to pyyaml null. If you want to use <tt class="docutils literal"><span class="pre">sg_grp_name</span></tt>, then please set <tt class="docutils literal"><span class="pre">cidr_ip</span></tt> to pyyaml null.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Please notice that the <strong>settings.cfg</strong> file follows <a class="reference external" href="http://pyyaml.org/wiki/PythonTagScheme">PyYaml TagScheme</a>. That is <tt class="docutils literal"><span class="pre">Null</span></tt> is defined as <tt class="docutils literal"><span class="pre">!!null</span> <span class="pre">''</span></tt> and boolean vaule as <tt class="docutils literal"><span class="pre">!!bool</span> <span class="pre">'True'</span></tt> or <tt class="docutils literal"><span class="pre">!!bool</span> <span class="pre">'False'</span></tt>.</p>
+</div>
 </div>
 </div>
 </div>
 <div class="section" id="pod-section">
 <h2>POD Section<a class="headerlink" href="#pod-section" title="Permalink to this headline">¶</a></h2>
+<p>This section contains all the information to create or delete your PODs.</p>
 <div class="section" id="id2">
 <h3>name<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>This field takes a string value for your POD group <tt class="docutils literal"><span class="pre">Name</span></tt> tag. This is also used as the base to create <tt class="docutils literal"><span class="pre">Name</span></tt> tags of your instances in the POD.</p>
 </div>
 <div class="section" id="id3">
 <h3>count<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p>This is the count of PODs in each subnet that is associated. For example, if the associated subnet group contains 10 subnets and the POD count is 4, then CloudWhip creates 40 PODs in total, 4 in each subnet.</p>
 </div>
 <div class="section" id="associate-subnet-group-name">
 <h3>associate_subnet_group_name<a class="headerlink" href="#associate-subnet-group-name" title="Permalink to this headline">¶</a></h3>
+<p>Defines the <a class="reference internal" href="#subnet-group-name-sec"><em>subnet_group_name</em></a> to be associated with this POD.</p>
 </div>
 <div class="section" id="instance-settings">
 <h3>instance_settings<a class="headerlink" href="#instance-settings" title="Permalink to this headline">¶</a></h3>
+<p>This subsection contains all the information of your instances that belongs to this POD.</p>
 <div class="section" id="inst-name">
 <h4>inst_name<a class="headerlink" href="#inst-name" title="Permalink to this headline">¶</a></h4>
+<p>This field takes a string value for your instance <tt class="docutils literal"><span class="pre">Name</span></tt> tag. Your launched instance will have its <tt class="docutils literal"><span class="pre">Name</span></tt> tag as:</p>
+<div class="highlight-python"><div class="highlight"><pre>{subnet_name_tag}:{pod_name}:{inst_name}:{count}
+</pre></div>
+</div>
 </div>
 <div class="section" id="ami-id">
 <h4>ami_id<a class="headerlink" href="#ami-id" title="Permalink to this headline">¶</a></h4>
+<p>This defines the ID of your desired Amazon Machine Image (AMI). Here is a list of <a class="reference external" href="http://aws.amazon.com/amazon-linux-ami/">Amazon Linux AMI IDs</a>. You can either create your own AMIs, use an existing shared image or use a Paid AMI. Please refer to AWS User Guide on <a class="reference external" href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html">AMIs</a> for more details.</p>
 </div>
 <div class="section" id="associate-sg">
 <h4>associate_sg<a class="headerlink" href="#associate-sg" title="Permalink to this headline">¶</a></h4>
+<p>Specify the security group name to be associated with the instance. For example in <strong>settings.cfg.template1</strong> we specify <tt class="docutils literal"><span class="pre">grant_ssh_access</span></tt> to give ssh access to the instance for the ssh key pair name (<a class="reference internal" href="#ssh-key-name-sec"><em>key_name</em></a>) defined.</p>
 </div>
 <div class="section" id="public-ip">
 <h4>public_ip<a class="headerlink" href="#public-ip" title="Permalink to this headline">¶</a></h4>
-<p>bool</p>
+<p>Takes boolean value to define whether the instance should be associated with a Public IP to be reached from Internet.</p>
 </div>
 <div class="section" id="private-ip">
 <h4>private_ip<a class="headerlink" href="#private-ip" title="Permalink to this headline">¶</a></h4>
-<p>Wildcard bits</p>
+<p>This defines the private IP address for the instance. This field accepts wild mask bits as shown in <strong>settings.cfg.template1</strong>.</p>
+<p>For example you have a subnet 10.0.1.0/24 and if you want a particular AMI (say Linux) to always have a private IP address ending with <tt class="docutils literal"><span class="pre">1</span></tt> (last octet), such as 10.0.1.1, 10.0.1.11, 10.0.1.21, etc., then your <tt class="docutils literal"><span class="pre">private_ip</span></tt> will be <tt class="docutils literal"><span class="pre">x.x.x.$1</span></tt>. If you now want another AMI (Windows) to always start with <tt class="docutils literal"><span class="pre">2</span></tt> in the same subnet your <tt class="docutils literal"><span class="pre">private_ip</span></tt> will be <tt class="docutils literal"><span class="pre">x.x.x.2$</span></tt>, hence your Windows instances will have private IPs such as 10.0.1.20, 10.0.1.21, 10.0.1.22, etc.,</p>
+<p>If you do not wish to use the mask bits and let CloudWhip assign the next available subnet IP, then your <tt class="docutils literal"><span class="pre">private_ip</span></tt> field will be <tt class="docutils literal"><span class="pre">x.x.x.x</span></tt>, as shown for <tt class="docutils literal"><span class="pre">dmz</span></tt> POD in the template file.</p>
 </div>
 <div class="section" id="key-name">
-<h4>key_name<a class="headerlink" href="#key-name" title="Permalink to this headline">¶</a></h4>
+<span id="ssh-key-name-sec"></span><h4>key_name<a class="headerlink" href="#key-name" title="Permalink to this headline">¶</a></h4>
+<p>Specify an existing SSH Key Pair Name associated with your AWS account to give SSH access to the instance. Refer to <a class="reference external" href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html">Amazon EC2 Key Pairs</a> for more details.</p>
 </div>
 </div>
 </div>

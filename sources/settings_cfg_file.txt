@@ -59,6 +59,8 @@ VPC Section
 
 This section contains all the information to create or delete your VPC, subnet and security groups.
 
+.. _vpc_name_sec:
+
 name
 #########
 
@@ -74,10 +76,12 @@ subnet_settings
 
 This section contains information about your subnets within the VPC you just created.
 
+.. _subnet_group_name_sec:
+
 subnet_group_name
 ********************
 
-Give a name to your subnet group. 
+This field takes a string value for your subnet group ``Name`` tag.
 
 count
 ***********
@@ -87,7 +91,7 @@ Mention the number (integer value) of subnets you want to create withing VPC you
 subnet_cidr_block 
 ******************
 
-This filed specifies the cidr blocks for the subnets. You can create multiple subnets in single request within the VPC by using a range of valid cidr blocks as shown in ``settings.cfg.template1``. 
+This field specifies the cidr blocks for the subnets. You can create multiple subnets in single request within the VPC by using a range of valid cidr blocks as shown in ``settings.cfg.template1``. 
 
 .. note::
 
@@ -125,55 +129,89 @@ If you want to give Internet access to the subnet in your VPC then the Destinati
 security_groups
 ###################
 
+This section contains information about your security groups that you want to associate with your VPC. Please visit AWS User Guide on `Security Group <http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html>`_ for more details on Amazon EC2 Security Groups.
+
 sg_name
 ****************
+This field takes a string value for your security group ``Name`` tag.
 
 description
 ****************
+A description for your security group.
 
 associate_vpc
 ****************
+Mention the VPC's :ref:`vpc_name_sec` value here to associate your security group with that particular VPC.
 
 rules
 ****************
+This is a nested python list of security group rules. A single rule structure is as follows::
+
+	rules = [["ip_protocol", "from_port", "to_port", "cidr_ip", "sg_grp_name"]]
+
+Here ``sg_grp_name`` refers to an existing security group name.
+
+.. Warning::
+
+	You can not use ``cidr_ip`` or ``sg_grp_name`` field together as in **settings.cfg.template1**, where the ``sg_grp_name`` is set to pyyaml null. If you want to use ``sg_grp_name``, then please set ``cidr_ip`` to pyyaml null. 
+
+.. note::
+
+	Please notice that the **settings.cfg** file follows `PyYaml TagScheme <http://pyyaml.org/wiki/PythonTagScheme>`_. That is ``Null`` is defined as ``!!null ''`` and boolean vaule as ``!!bool 'True'`` or ``!!bool 'False'``.
 
 *********************
 POD Section
 *********************
 
+This section contains all the information to create or delete your PODs.
+
 name
 #################
+This field takes a string value for your POD group ``Name`` tag. This is also used as the base to create ``Name`` tags of your instances in the POD.
 
 count 
 #################
+This is the count of PODs in each subnet that is associated. For example, if the associated subnet group contains 10 subnets and the POD count is 4, then CloudWhip creates 40 PODs in total, 4 in each subnet.  
 
 associate_subnet_group_name
 ##############################
+Defines the :ref:`subnet_group_name_sec` to be associated with this POD.
 
 instance_settings
 ##################
+This subsection contains all the information of your instances that belongs to this POD.
 
 inst_name
 ****************
+This field takes a string value for your instance ``Name`` tag. Your launched instance will have its ``Name`` tag as::
+	
+	{subnet_name_tag}:{pod_name}:{inst_name}:{count}
 
 ami_id
 ****************
+This defines the ID of your desired Amazon Machine Image (AMI). Here is a list of `Amazon Linux AMI IDs <http://aws.amazon.com/amazon-linux-ami/>`_. You can either create your own AMIs, use an existing shared image or use a Paid AMI. Please refer to AWS User Guide on `AMIs <http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html>`_ for more details.
 
 associate_sg
 ****************
+Specify the security group name to be associated with the instance. For example in **settings.cfg.template1** we specify ``grant_ssh_access`` to give ssh access to the instance for the ssh key pair name (:ref:`ssh_key_name_sec`) defined.
 
 public_ip 
 ****************
-
-bool
+Takes boolean value to define whether the instance should be associated with a Public IP to be reached from Internet. 
 
 private_ip
 ****************
+This defines the private IP address for the instance. This field accepts wild mask bits as shown in **settings.cfg.template1**. 
 
-Wildcard bits
+For example you have a subnet 10.0.1.0/24 and if you want a particular AMI (say Linux) to always have a private IP address ending with ``1`` (last octet), such as 10.0.1.1, 10.0.1.11, 10.0.1.21, etc., then your ``private_ip`` will be ``x.x.x.$1``. If you now want another AMI (Windows) to always start with ``2`` in the same subnet your ``private_ip`` will be ``x.x.x.2$``, hence your Windows instances will have private IPs such as 10.0.1.20, 10.0.1.21, 10.0.1.22, etc.,
+
+If you do not wish to use the mask bits and let CloudWhip assign the next available subnet IP, then your ``private_ip`` field will be ``x.x.x.x``, as shown for ``dmz`` POD in the template file. 
+
+.. _ssh_key_name_sec:
 
 key_name
 ****************
+Specify an existing SSH Key Pair Name associated with your AWS account to give SSH access to the instance. Refer to `Amazon EC2 Key Pairs <http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html>`_ for more details.
 
 **********************
 Examples
