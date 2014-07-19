@@ -220,5 +220,27 @@ Examples
 Many PODs in one subnet
 ########################
 
-One POD / Subnet
+To create a Lab environment with many PODs in one subnet as shown in figure below, please refer to **settings.cfg.template1**
+
+.. figure:: _static/arch1.png
+    :width: 600px
+    :align: center
+    :height: 700px
+    :alt: alternate text
+    :figclass: align-center
+
+    Many PODs in One Subnet
+
+One POD per Subnet
 ##################
+
+To create a Lab environment with one POD per subnet as shown in figure below, please refer to **settings.cfg.template2**
+
+.. figure:: _static/arch2.png
+    :width: 600px
+    :align: center
+    :height: 600px
+    :alt: alternate text
+    :figclass: align-center
+
+    One POD per Subnet
