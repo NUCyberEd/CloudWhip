@@ -89,7 +89,7 @@ Now let us use these arguments for following four main actions that you can perf
 1. Create VPC and Subnets with Security Groups
 -----------------------------------------------
 
-To create the vpc on AWS as defined in the settings.cfg file, use the following command::
+To create a VPC on AWS as defined in the settings.cfg file, use the following command::
 	
 	python cloudWhip.py -c vpc -a create
 
@@ -100,7 +100,7 @@ If you have defined two or more VPCs in your configuration file then you can spe
 2. Create PODs
 ---------------
 
-To create the Point of Delivery(POD), use similar command as used while creating the VPC but the component parameter here will be ``pod`` instead::
+To create the Point of Delivery(POD), use similar command as used while creating a VPC but the component parameter here will be ``pod`` instead::
 
 	python cloudWhip.py -c pod -a create
 	
@@ -116,7 +116,7 @@ Again, you can use the **-l** switch to specify the PODs to be created::
 3. Delete PODs
 ----------------
 
-To delete all the POD components use the **delete** action parameter as follows::
+To delete all POD components use the **delete** action parameter as follows::
 
 	python cloudWhip.py -c pod -a delete
 
@@ -127,7 +127,7 @@ You can use the **-l** switch with the delete action as well. Say for example yo
 4. Delete VPC and Subnets
 ---------------------------
 
-Deleting the VPC is similar. Note that deleting the VPC will delete all the components associated with the VPC first such as subnets, security groups, route tables and the VPC itself at the end::
+Deleting a VPC is similar. Note that deleting a VPC will delete all the components associated with the VPC first such as subnets, security groups, route tables and then VPC itself at the end::
 
 	python cloudWhip.py -c vpc -a delete 
 

@@ -141,7 +141,7 @@ optional arguments:
 </div>
 <div class="section" id="create-vpc-and-subnets-with-security-groups">
 <h2>1. Create VPC and Subnets with Security Groups<a class="headerlink" href="#create-vpc-and-subnets-with-security-groups" title="Permalink to this headline">¶</a></h2>
-<p>To create the vpc on AWS as defined in the settings.cfg file, use the following command:</p>
+<p>To create a VPC on AWS as defined in the settings.cfg file, use the following command:</p>
 <div class="highlight-python"><div class="highlight"><pre>python cloudWhip.py -c vpc -a create
 </pre></div>
 </div>
@@ -152,7 +152,7 @@ optional arguments:
 </div>
 <div class="section" id="create-pods">
 <h2>2. Create PODs<a class="headerlink" href="#create-pods" title="Permalink to this headline">¶</a></h2>
-<p>To create the Point of Delivery(POD), use similar command as used while creating the VPC but the component parameter here will be <tt class="docutils literal"><span class="pre">pod</span></tt> instead:</p>
+<p>To create the Point of Delivery(POD), use similar command as used while creating a VPC but the component parameter here will be <tt class="docutils literal"><span class="pre">pod</span></tt> instead:</p>
 <div class="highlight-python"><div class="highlight"><pre>python cloudWhip.py -c pod -a create
 </pre></div>
 </div>
@@ -167,7 +167,7 @@ optional arguments:
 </div>
 <div class="section" id="delete-pods">
 <h2>3. Delete PODs<a class="headerlink" href="#delete-pods" title="Permalink to this headline">¶</a></h2>
-<p>To delete all the POD components use the <strong>delete</strong> action parameter as follows:</p>
+<p>To delete all POD components use the <strong>delete</strong> action parameter as follows:</p>
 <div class="highlight-python"><div class="highlight"><pre>python cloudWhip.py -c pod -a delete
 </pre></div>
 </div>
@@ -178,7 +178,7 @@ optional arguments:
 </div>
 <div class="section" id="delete-vpc-and-subnets">
 <h2>4. Delete VPC and Subnets<a class="headerlink" href="#delete-vpc-and-subnets" title="Permalink to this headline">¶</a></h2>
-<p>Deleting the VPC is similar. Note that deleting the VPC will delete all the components associated with the VPC first such as subnets, security groups, route tables and the VPC itself at the end:</p>
+<p>Deleting a VPC is similar. Note that deleting a VPC will delete all the components associated with the VPC first such as subnets, security groups, route tables and then VPC itself at the end:</p>
 <div class="highlight-python"><div class="highlight"><pre>python cloudWhip.py -c vpc -a delete
 </pre></div>
 </div>

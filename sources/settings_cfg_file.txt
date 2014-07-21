@@ -26,7 +26,7 @@ If you need detailed information for pyymal format with examples, please visit t
 Account Section
 *********************
 
-Account section gives the general information about your AWS account for CloudWhip to use the Boto API calls internally.
+Account section gives general information about your AWS account for CloudWhip to use the Boto API calls internally.
 
 connect_to_region
 ####################
@@ -91,7 +91,7 @@ Mention the number (integer value) of subnets you want to create withing VPC you
 subnet_cidr_block 
 ******************
 
-This field specifies the cidr blocks for the subnets. You can create multiple subnets in single request within the VPC by using a range of valid cidr blocks as shown in ``settings.cfg.template1``. 
+This field specifies the cidr block for your subnet. You can create multiple subnets in single request within the VPC by using a range of valid cidr blocks as shown in ``settings.cfg.template1``. 
 
 .. note::
 
@@ -100,13 +100,13 @@ This field specifies the cidr blocks for the subnets. You can create multiple su
 route_table
 ****************
 
-This field specifies the route table rules associated with the subnet. For more details about route tables in AWS, please go through AWS User Guide on `Route Tables <http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html>`_. ``route_table`` field value is a list of python dictionary with ``Destination`` and ``Target`` as its key. The values for both the Keys will be list of route paths. 
+This field specifies the route table rules associated with the subnet. For more details about route tables in AWS, please go through AWS User Guide on `Route Tables <http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html>`_. ``route_table`` field value is a list of python dictionary with ``Destination`` and ``Target`` as its keys. The values for both the Keys will be list of route paths. 
 
-If you want to give Internet access to the subnet in your VPC then the Destination route would be 0.0.0.0/0, which means world and you live the corresponding Target entry as blank, since by default CloudWhip considers a blank Target entry as the internet gateway associated with the VPC. This is illustrated in template1. 
+If you want to give Internet access to the subnet in your VPC then the Destination route would be 0.0.0.0/0, which means world and you live the corresponding ``Target`` entry as blank, since by default CloudWhip considers a blank Target entry as the internet gateway associated with the VPC. This is illustrated in template1. 
 
 .. note::
 
-	The route_table entries are in pairs. In other words the first entry in Destination list and the first entry in the Target list corresponds to one row in the actual route table. 
+	The route_table entries are in pairs. In other words the first entry in Destination list and the first entry in the ``Target`` list corresponds to one row in the actual route table. 
 
 	So if you want a route table as illustrated below:
 
@@ -141,7 +141,7 @@ A description for your security group.
 
 associate_vpc
 ****************
-Mention the VPC's :ref:`vpc_name_sec` value here to associate your security group with that particular VPC.
+Mention VPC's :ref:`vpc_name_sec` value here to associate your security group with that particular VPC.
 
 rules
 ****************
@@ -167,7 +167,7 @@ This section contains all the information to create or delete your PODs.
 
 name
 #################
-This field takes a string value for your POD group ``Name`` tag. This is also used as the base to create ``Name`` tags of your instances in the POD.
+This field takes a string value for your POD group ``Name`` tag. This is also used as a base to create ``Name`` tags of your instances in the POD.
 
 count 
 #################

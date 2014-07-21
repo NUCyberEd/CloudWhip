@@ -35,7 +35,7 @@ Requires
 Usage
 -------------
 
-Runt the following command::
+Run the following command::
 
 	python cloudWhip.py -c <component> -a <action> [options]
 

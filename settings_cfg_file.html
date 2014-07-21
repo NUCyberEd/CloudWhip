@@ -66,7 +66,7 @@
 </div>
 <div class="section" id="account-section">
 <h2>Account Section<a class="headerlink" href="#account-section" title="Permalink to this headline">¶</a></h2>
-<p>Account section gives the general information about your AWS account for CloudWhip to use the Boto API calls internally.</p>
+<p>Account section gives general information about your AWS account for CloudWhip to use the Boto API calls internally.</p>
 <div class="section" id="connect-to-region">
 <h3>connect_to_region<a class="headerlink" href="#connect-to-region" title="Permalink to this headline">¶</a></h3>
 <p>This field tells CloudWhip where to deploy your lab environment. AWS offers you several <a class="reference external" href="http://docs.aws.amazon.com/general/latest/gr/rande.html">regions</a> to deploy your instances, you can choose them close to your Geolocation or as per your requirements. For example, your field value will be <tt class="docutils literal"><span class="pre">us-east-1</span></tt> if like your lab to be deployed in US East (Northern Virginia) Region.</p>
@@ -112,7 +112,7 @@
 </div>
 <div class="section" id="subnet-cidr-block">
 <h4>subnet_cidr_block<a class="headerlink" href="#subnet-cidr-block" title="Permalink to this headline">¶</a></h4>
-<p>This field specifies the cidr blocks for the subnets. You can create multiple subnets in single request within the VPC by using a range of valid cidr blocks as shown in <tt class="docutils literal"><span class="pre">settings.cfg.template1</span></tt>.</p>
+<p>This field specifies the cidr block for your subnet. You can create multiple subnets in single request within the VPC by using a range of valid cidr blocks as shown in <tt class="docutils literal"><span class="pre">settings.cfg.template1</span></tt>.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Your subnet <tt class="docutils literal"><span class="pre">count</span></tt> and <tt class="docutils literal"><span class="pre">subnet_cidr_block</span></tt> range if any should always match. For example, if you specify the subnet count value as 10 and your VPC cidr block is 192.168.1.1/20, then your <tt class="docutils literal"><span class="pre">subnet_cidr_block</span></tt> value can be 192.168.1-10.1/24, 192.168.5-15.1/24 etc., but CloudWhip will issue an error if it is something like 192.168.1-5.1/24 since the range is only 5 but the count was set to 10.</p>
@@ -120,11 +120,11 @@
 </div>
 <div class="section" id="route-table">
 <h4>route_table<a class="headerlink" href="#route-table" title="Permalink to this headline">¶</a></h4>
-<p>This field specifies the route table rules associated with the subnet. For more details about route tables in AWS, please go through AWS User Guide on <a class="reference external" href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html">Route Tables</a>. <tt class="docutils literal"><span class="pre">route_table</span></tt> field value is a list of python dictionary with <tt class="docutils literal"><span class="pre">Destination</span></tt> and <tt class="docutils literal"><span class="pre">Target</span></tt> as its key. The values for both the Keys will be list of route paths.</p>
-<p>If you want to give Internet access to the subnet in your VPC then the Destination route would be 0.0.0.0/0, which means world and you live the corresponding Target entry as blank, since by default CloudWhip considers a blank Target entry as the internet gateway associated with the VPC. This is illustrated in template1.</p>
+<p>This field specifies the route table rules associated with the subnet. For more details about route tables in AWS, please go through AWS User Guide on <a class="reference external" href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html">Route Tables</a>. <tt class="docutils literal"><span class="pre">route_table</span></tt> field value is a list of python dictionary with <tt class="docutils literal"><span class="pre">Destination</span></tt> and <tt class="docutils literal"><span class="pre">Target</span></tt> as its keys. The values for both the Keys will be list of route paths.</p>
+<p>If you want to give Internet access to the subnet in your VPC then the Destination route would be 0.0.0.0/0, which means world and you live the corresponding <tt class="docutils literal"><span class="pre">Target</span></tt> entry as blank, since by default CloudWhip considers a blank Target entry as the internet gateway associated with the VPC. This is illustrated in template1.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p>The route_table entries are in pairs. In other words the first entry in Destination list and the first entry in the Target list corresponds to one row in the actual route table.</p>
+<p>The route_table entries are in pairs. In other words the first entry in Destination list and the first entry in the <tt class="docutils literal"><span class="pre">Target</span></tt> list corresponds to one row in the actual route table.</p>
 <p>So if you want a route table as illustrated below:</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -171,7 +171,7 @@
 </div>
 <div class="section" id="associate-vpc">
 <h4>associate_vpc<a class="headerlink" href="#associate-vpc" title="Permalink to this headline">¶</a></h4>
-<p>Mention the VPC&#8217;s <a class="reference internal" href="#vpc-name-sec"><em>name</em></a> value here to associate your security group with that particular VPC.</p>
+<p>Mention VPC&#8217;s <a class="reference internal" href="#vpc-name-sec"><em>name</em></a> value here to associate your security group with that particular VPC.</p>
 </div>
 <div class="section" id="rules">
 <h4>rules<a class="headerlink" href="#rules" title="Permalink to this headline">¶</a></h4>
@@ -196,7 +196,7 @@
 <p>This section contains all the information to create or delete your PODs.</p>
 <div class="section" id="id2">
 <h3>name<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
-<p>This field takes a string value for your POD group <tt class="docutils literal"><span class="pre">Name</span></tt> tag. This is also used as the base to create <tt class="docutils literal"><span class="pre">Name</span></tt> tags of your instances in the POD.</p>
+<p>This field takes a string value for your POD group <tt class="docutils literal"><span class="pre">Name</span></tt> tag. This is also used as a base to create <tt class="docutils literal"><span class="pre">Name</span></tt> tags of your instances in the POD.</p>
 </div>
 <div class="section" id="id3">
 <h3>count<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
