@@ -1,7 +1,7 @@
 Quick Start Guide
 =================
 
-Following is a quick start guide for you to use and explore CloudWhip tool for deploying labs on Amazon Cloud Services.
+Following is a quick tutorial for you to use and explore CloudWhip tool for deploying labs on Amazon Cloud Services.
 
 Initial Setup
 ---------------
